@@ -1,6 +1,6 @@
 ---
 layout: post
-title: first-post
+title: First Post
 date: 2024-09-08 07:39 -0600
 ---
 # The Beginning
