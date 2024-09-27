@@ -1,0 +1,8 @@
+---
+layout: post
+title: Passed My First Comptia Exam
+date: 2024-09-26 23:11 -0600
+---
+# Comptia A+ 1101 Passed
+
+They say the first step is always the hardest. Today I sure understood that with having all my plans revolve around passing this exam first try. I showed up almost an hour early and when double checking everything I needed to take the exam and what not to do I noticed you need two forms of ID. I called one of my coworkers and asked him if needed two forms of ID he has his concealed carry so that didn't help figured I can speed home if I need so I'll just go ask about it to see if I have something that would work in my car I have insurace and a ticket for registartion so personally those should count if needed. Anyways went in to ask about that and the lady said "Well you got a debit card right?" I say "Yeah". She then proceeds "Well come sit down and we'll get you started." I was not mentally prepared to start an hour early what so ever and she said "You can go back out and study or just take it now." I sat for a moment and just decided to move forward with the exam procedures if I went back to the car I'd be doubting myself and all the work I've put in to make sure I pass this test. So while it might have been wiser and to my advantage to wait and brush up on the topics before going in. I believe for me that was the deciding factor on why I passed I believed in myself and threw away all self doubt. My fear of not passing the exam was a mile wide but only and inch deep. Looks huge like an ocean and you'll drown but, once you step in there's nothing to worry about. You'll be just a little wet.
