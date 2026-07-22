@@ -121,22 +121,22 @@
 
       <!-- ============ stats ============ -->
       <section class="stats" aria-label="By the numbers">
-        <article data-reveal>
+        <a data-reveal href="#experience" aria-label="5+ years — jump to experience">
           <strong><span data-count="5">0</span>+</strong>
           <span>years keeping systems in production</span>
-        </article>
-        <article data-reveal>
+        </a>
+        <a data-reveal href="#proj-router" aria-label="95% fewer router config errors — jump to the project">
           <strong><span data-count="95">0</span>%</strong>
           <span>drop in router config errors after automation</span>
-        </article>
-        <article data-reveal>
+        </a>
+        <a data-reveal href="#proj-homelab" aria-label="20+ self-hosted services — jump to the homelab">
           <strong><span data-count="20">0</span>+</strong>
           <span>self-hosted services running 24/7 in my Proxmox lab</span>
-        </article>
-        <article data-reveal>
+        </a>
+        <a data-reveal href="#reviews" aria-label="50 five-star reviews — jump to reviews">
           <strong><span data-count="50">0</span></strong>
           <span>real five-star reviews from client satisfaction surveys</span>
-        </article>
+        </a>
       </section>
 
       <!-- ============ what i do ============ -->
@@ -236,7 +236,7 @@
           <h2>Small infrastructure wins that compound.</h2>
         </div>
         <div class="work-grid">
-          <article data-reveal>
+          <article data-reveal id="proj-router">
             <span>RouterOS</span>
             <h3>Router automation</h3>
             <p>RouterOS scripts and templates covering IPsec/L2TP VPN, firewall rules, guest VLANs, FTP backup, and rollback.</p>
@@ -278,7 +278,7 @@
             <p>Documented procedures paired with automated workflows replacing manual form handling.</p>
             <p class="work-result">60% less manual processing time</p>
           </article>
-          <article data-reveal>
+          <article data-reveal id="proj-homelab">
             <span>Homelab</span>
             <h3>Proxmox lab, always on</h3>
             <p>20+ LXC containers: Wazuh SIEM, Prometheus + Grafana monitoring, Vaultwarden, Caddy, Cloudflare Tunnel, Blocky DNS, Forgejo, Immich, and a self-hosted RustDesk relay — with backup validation and DR restore testing.</p>
