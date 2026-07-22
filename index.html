@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Logan Grass — Systems &amp; Infrastructure</title>
+    <meta
+      name="description"
+      content="Logan Grass runs production IT — Windows Server, Active Directory, Microsoft 365, MikroTik and UniFi networks, PowerShell automation, and a Proxmox homelab that never sleeps."
+    >
+    <link rel="canonical" href="https://logangrass.com/">
+    <meta name="theme-color" content="#12121d">
+    <meta name="author" content="Logan Grass">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://logangrass.com/">
+    <meta property="og:title" content="Logan Grass — Systems &amp; Infrastructure">
+    <meta property="og:description" content="Good infrastructure is invisible. I build it that way. Systems, networks, identity, and automation from Los Angeles.">
+    <meta property="og:image" content="https://logangrass.com/assets/og-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Logan Grass — Systems and Infrastructure, Los Angeles CA">
+    <meta property="profile:first_name" content="Logan">
+    <meta property="profile:last_name" content="Grass">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Logan Grass — Systems &amp; Infrastructure">
+    <meta name="twitter:description" content="Good infrastructure is invisible. I build it that way.">
+    <meta name="twitter:image" content="https://logangrass.com/assets/og-card.png">
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Logan Grass home">
+        <span class="brand-name">logan-grass</span>
+        <span class="path">:~</span>
+        <span class="cursor" aria-hidden="true"></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#do">do</a>
+        <span aria-hidden="true">/</span>
+        <a href="#experience">history</a>
+        <span aria-hidden="true">/</span>
+        <a href="#work">builds</a>
+        <span aria-hidden="true">/</span>
+        <a href="#stack">stack</a>
+        <span aria-hidden="true">/</span>
+        <a href="#lab">lab</a>
+        <span aria-hidden="true">/</span>
+        <a href="#reviews">logs</a>
+        <span aria-hidden="true">/</span>
+        <a href="#contact">ping</a>
+      </nav>
+      <a class="nav-action" href="assets/logan-grass-resume.pdf" download>
+        <span class="nav-action-dot" aria-hidden="true"></span>
+        <span>resume.pdf</span>
+      </a>
+    </header>
+
+    <main id="main">
+      <!-- ============ hero ============ -->
+      <section class="hero" id="top">
+        <div class="hero-main" data-reveal>
+          <p class="kicker">~/la/logan-grass · systems &amp; infrastructure</p>
+          <h1>Good infrastructure is <em>invisible</em>. I build it that way.</h1>
+          <p class="intro">
+            Systems administrator and infrastructure tech in Los Angeles. I live where users,
+            endpoints, identity, and networks meet — fixing what's broken, automating what repeats,
+            and documenting what's left so it stays fixed.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#work">See what I've built</a>
+            <a class="button" href="#contact">Say hello</a>
+          </div>
+          <div class="tags" aria-label="Core stack">
+            <span>Windows Server</span>
+            <span>Active Directory</span>
+            <span>Entra ID</span>
+            <span>MikroTik</span>
+            <span>UniFi</span>
+            <span>PowerShell</span>
+            <span>Proxmox</span>
+          </div>
+        </div>
+
+        <aside class="hero-side" data-reveal>
+          <div class="terminal" aria-label="Terminal introduction">
+            <div class="terminal-bar">
+              <span class="t-dot red"></span>
+              <span class="t-dot amber"></span>
+              <span class="t-dot green"></span>
+              <span class="terminal-title">logan@la:~</span>
+            </div>
+            <div class="terminal-body" id="terminal-body" aria-live="off"></div>
+          </div>
+          <div class="location-card">
+            <button class="location-title" type="button" data-map-reset aria-label="Reset map to Los Angeles">
+              <span class="pin-icon" aria-hidden="true"></span>
+              <strong>currently based in</strong>
+            </button>
+            <div class="map-card" id="la-map" aria-label="Map of Los Angeles">
+              <div class="map-loading">loading map…</div>
+              <span class="map-label">LOS ANGELES</span>
+            </div>
+            <div class="location-row">
+              <button class="location-place" type="button" data-map-reset>Los Angeles, CA</button>
+              <span class="mono muted" id="local-time-2"></span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- ============ stats ============ -->
+      <section class="stats" aria-label="By the numbers">
+        <article data-reveal>
+          <strong><span data-count="5">0</span>+</strong>
+          <span>years keeping systems in production</span>
+        </article>
+        <article data-reveal>
+          <strong><span data-count="95">0</span>%</strong>
+          <span>drop in router config errors after automation</span>
+        </article>
+        <article data-reveal>
+          <strong><span data-count="50">0</span>+</strong>
+          <span>concurrent users on secure remote access</span>
+        </article>
+        <article data-reveal>
+          <strong><span data-count="50">0</span></strong>
+          <span>real five-star reviews from client satisfaction surveys</span>
+        </article>
+      </section>
+
+      <!-- ============ what i do ============ -->
+      <section class="section" id="do">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow"><span class="sec-index">01</span> what I do</p>
+          <h2>Systems, networks, and the people using them.</h2>
+        </div>
+        <div class="service-list">
+          <article data-reveal>
+            <span>01</span>
+            <h3>Escalations &amp; incidents</h3>
+            <p>The tickets nobody else wants. Server, network, and access incidents worked to root cause — not just closed.</p>
+          </article>
+          <article data-reveal>
+            <span>02</span>
+            <h3>Networks &amp; infrastructure</h3>
+            <p>MikroTik, UniFi, VLANs, RDS, VoIP, cameras, fiber, racks, and full office buildouts — hands on the hardware.</p>
+          </article>
+          <article data-reveal>
+            <span>03</span>
+            <h3>Endpoints &amp; identity</h3>
+            <p>Windows, AD, GPO, BitLocker, Microsoft 365, Entra ID, Teams Rooms, passkeys, and YubiKeys in daily use.</p>
+          </article>
+          <article data-reveal>
+            <span>04</span>
+            <h3>Security in practice</h3>
+            <p>MFA, firewall policy, VPNs, VLAN isolation, and backups — applied to real environments, not just checklists.</p>
+          </article>
+          <article data-reveal>
+            <span>05</span>
+            <h3>Automation</h3>
+            <p>RouterOS scripts, PowerShell, Power Automate, PXE imaging — anything done twice by hand gets scripted.</p>
+          </article>
+          <article data-reveal>
+            <span>06</span>
+            <h3>Documentation &amp; people</h3>
+            <p>SOPs, handoffs, and plain-language explanations. A fix isn't finished until someone else can repeat it.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ history ============ -->
+      <section class="section" id="experience">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow"><span class="sec-index">02</span> history</p>
+          <h2>Help desk to infrastructure, one escalation at a time.</h2>
+        </div>
+        <div class="timeline">
+          <article data-reveal>
+            <div class="timeline-meta">
+              <time datetime="2026-03">2026 — now</time>
+              <span class="employer">ApexIT Consulting</span>
+            </div>
+            <div>
+              <h3>Service Delivery Specialist <span class="role-sub">· onsite at Airborne Systems, Santa Ana</span></h3>
+              <p>Embedded IT for an aerospace manufacturer. Root-cause isolation across workstation, network, license, and server layers for SolidWorks, PDM, Qpulse, and RDP workflows. Windows 11 rollouts, BitLocker recovery, Teams Rooms and Logitech device configuration, YubiKey and passkey enrollment, Entra ID readiness.</p>
+            </div>
+          </article>
+          <article data-reveal>
+            <div class="timeline-meta">
+              <time datetime="2025">2025 — 2026</time>
+              <span class="employer">911 IT</span>
+            </div>
+            <div>
+              <h3>Field Specialist II</h3>
+              <p>Primary escalation owner for server, networking, and infrastructure incidents across MSP clients. Datacenter installs, multi-site rollouts, rack buildouts, VLAN segmentation, firewall policy, wireless planning. Fiber optic work including fusion splicing and OTDR testing.</p>
+            </div>
+          </article>
+          <article data-reveal>
+            <div class="timeline-meta">
+              <time datetime="2023">2023 — 2025</time>
+              <span class="employer">911 IT</span>
+            </div>
+            <div>
+              <h3>Help Desk Manager</h3>
+              <p>Ran SLA compliance, queue health, and escalation handoffs in a high-volume MSP. Cut manual workload with PowerShell automation, SOPs, and deployment templates. Coached technicians on triage, documentation, and communication.</p>
+            </div>
+          </article>
+          <article data-reveal>
+            <div class="timeline-meta">
+              <time datetime="2021">2021 — 2023</time>
+              <span class="employer">911 IT</span>
+            </div>
+            <div>
+              <h3>Help Desk Technician</h3>
+              <p>Tier 1–2 support across Windows endpoints, Microsoft 365, printers, networking, and business applications. Standardized workstation provisioning with imaging and checklist-driven setup.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ builds ============ -->
+      <section class="section" id="work">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow"><span class="sec-index">03</span> builds</p>
+          <h2>Small infrastructure wins that compound.</h2>
+        </div>
+        <div class="work-grid">
+          <article data-reveal>
+            <span>RouterOS</span>
+            <h3>Router automation</h3>
+            <p>RouterOS scripts and templates covering IPsec/L2TP VPN, firewall rules, guest VLANs, FTP backup, and rollback.</p>
+            <p class="work-result">95% fewer config errors · hours → seconds</p>
+          </article>
+          <article data-reveal>
+            <span>Remote access</span>
+            <h3>Secure RDS platform</h3>
+            <p>Remote Desktop Services with load balancing, MFA, session monitoring, and browser-based RDP.</p>
+            <p class="work-result">50+ concurrent users · 99.5% uptime</p>
+          </article>
+          <article data-reveal>
+            <span>Buildout</span>
+            <h3>Office from empty walls</h3>
+            <p>MikroTik edge, UniFi wireless, structured cabling, rack buildout, and VoIP for a brand-new office.</p>
+            <p class="work-result">Day-one ready for 25+ people · zero downtime</p>
+          </article>
+          <article data-reveal>
+            <span>Fiber</span>
+            <h3>Fiber &amp; outdoor Wi-Fi</h3>
+            <p>Single-mode fiber backhaul — fusion splicing, OTDR validation, weatherproof enclosures, grounding, surge protection.</p>
+            <p class="work-result">Full-site outdoor coverage, built for weather</p>
+          </article>
+          <article data-reveal>
+            <span>Segmentation</span>
+            <h3>Camera VLAN isolation</h3>
+            <p>IP cameras on a dedicated VLAN with switch tagging, access controls, and an NVR on redundant storage.</p>
+            <p class="work-result">Untrusted devices walled off from production</p>
+          </article>
+          <article data-reveal>
+            <span>Deployment</span>
+            <h3>PXE imaging pipeline</h3>
+            <p>Network boot imaging with driver injection and bundled software, replacing manual per-machine setup.</p>
+            <p class="work-result">Installs from hours → minutes, every build identical</p>
+          </article>
+          <article data-reveal>
+            <span>Process</span>
+            <h3>SOPs + Power Automate</h3>
+            <p>Documented procedures paired with automated workflows replacing manual form handling.</p>
+            <p class="work-result">60% less manual processing time</p>
+          </article>
+          <article data-reveal>
+            <span>Homelab</span>
+            <h3>Proxmox lab, always on</h3>
+            <p>20+ LXC containers: Wazuh SIEM, Prometheus + Grafana monitoring, Vaultwarden, Caddy, Cloudflare Tunnel, Blocky DNS, Forgejo, Immich, and a self-hosted RustDesk relay — with backup validation and DR restore testing.</p>
+            <p class="work-result">Where I break things before production can</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ stack ============ -->
+      <section class="section" id="stack">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow"><span class="sec-index">04</span> stack</p>
+          <h2>Run in production, not just listed.</h2>
+        </div>
+        <div class="stack-grid">
+          <article data-reveal>
+            <span>rmm / psa</span>
+            <ul class="chips">
+              <li>ConnectWise Automate</li>
+              <li>ConnectWise Manage</li>
+              <li>Autotask</li>
+              <li>ScreenConnect</li>
+              <li>IT Glue</li>
+              <li>IT Boost</li>
+              <li>Pax8</li>
+            </ul>
+          </article>
+          <article data-reveal>
+            <span>security / identity</span>
+            <ul class="chips">
+              <li>CrowdStrike</li>
+              <li>ThreatLocker</li>
+              <li>Sophos</li>
+              <li>Duo</li>
+              <li>Defender</li>
+              <li>Entra ID</li>
+              <li>Active Directory</li>
+              <li>SSL certs</li>
+              <li>VPN</li>
+            </ul>
+          </article>
+          <article data-reveal>
+            <span>microsoft 365</span>
+            <ul class="chips">
+              <li>Exchange Admin</li>
+              <li>Teams Admin</li>
+              <li>Teams Rooms</li>
+              <li>SharePoint</li>
+              <li>OneDrive</li>
+              <li>Intune</li>
+              <li>Power Automate</li>
+              <li>Tenant migrations</li>
+              <li>Licensing</li>
+            </ul>
+          </article>
+          <article data-reveal>
+            <span>servers / virtualization</span>
+            <ul class="chips">
+              <li>Windows Server</li>
+              <li>Group Policy</li>
+              <li>SCCM</li>
+              <li>Lansweeper</li>
+              <li>Hyper-V</li>
+              <li>XenCenter</li>
+              <li>Proxmox</li>
+              <li>Azure</li>
+              <li>DHCP</li>
+              <li>DNS</li>
+            </ul>
+          </article>
+          <article data-reveal>
+            <span>network</span>
+            <ul class="chips">
+              <li>MikroTik RouterOS</li>
+              <li>UniFi</li>
+              <li>FortiGate</li>
+              <li>WatchGuard</li>
+              <li>Sophos Firewall</li>
+              <li>VLANs</li>
+              <li>Firewall policy</li>
+              <li>Fiber termination</li>
+              <li>Structured cabling</li>
+            </ul>
+          </article>
+          <article data-reveal>
+            <span>backup / endpoints</span>
+            <ul class="chips">
+              <li>Veeam</li>
+              <li>Axcient</li>
+              <li>Backup validation</li>
+              <li>DR testing</li>
+              <li>ManageEngine</li>
+              <li>SOTI MobiControl</li>
+              <li>macOS &amp; iOS</li>
+              <li>Printers &amp; MFP</li>
+              <li>Eton on Rails</li>
+              <li>Electra laser cutter</li>
+              <li>QuickBooks</li>
+              <li>Sage</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ logs / reviews ============ -->
+      <section class="section reviews-section" id="reviews">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow"><span class="sec-index">05</span> logs</p>
+          <h2>Pulled from real closed tickets.</h2>
+        </div>
+        <p class="section-note" data-reveal>Client satisfaction surveys collected at 911 IT — names kept, companies anonymized.</p>
+      </section>
+
+      <div class="marquee" aria-label="Client feedback">
+        <div class="marquee-row">
+          <div class="marquee-track" data-marquee>
+            <blockquote><p>Logan is friendly, efficient, knowledgeable, patient, and persistent. He got it fixed the same day.</p><cite>Rebekah · nonprofit</cite></blockquote>
+            <blockquote><p>Did a great job not giving me what I wanted until he was able to confirm that it was correct to do so.</p><cite>Garry · technology</cite></blockquote>
+            <blockquote><p>He came up with a solution that should be a permanent fix.</p><cite>Dianna · accounting</cite></blockquote>
+            <blockquote><p>Awesome job setting up our office in St. George. Everything exactly as we wanted.</p><cite>Jordan · construction</cite></blockquote>
+            <blockquote><p>Very helpful and thorough in making sure everything was up and running.</p><cite>Kyna · accounting</cite></blockquote>
+          </div>
+        </div>
+        <div class="marquee-row">
+          <div class="marquee-track reverse" data-marquee>
+            <blockquote><p>Logan Rocks!</p><cite>Toni · retail</cite></blockquote>
+            <blockquote><p>10/10, would recommend!</p><cite>Amy · retail</cite></blockquote>
+            <blockquote><p>patient &amp; got it done.</p><cite>Haley · accounting</cite></blockquote>
+            <blockquote><p>Logan is always great to work with!</p><cite>Katelyn · accounting</cite></blockquote>
+            <blockquote><p>Resolved my time-sensitive issue right on the phone.</p><cite>Bryce · technology</cite></blockquote>
+            <blockquote><p>Great response and got my email working again.</p><cite>Kameron · real estate</cite></blockquote>
+            <blockquote><p>Thanks for your help — I'll call you back if Apple can't finish the job.</p><cite>Perrine · healthcare</cite></blockquote>
+            <blockquote><p>Logan is awesome!</p><cite>Mason · business services</cite></blockquote>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ contact ============ -->
+      <section class="section contact-section" id="contact">
+        <div class="contact-card" data-reveal>
+          <p class="eyebrow"><span class="sec-index">06</span> ping</p>
+          <h2>Say hello.</h2>
+          <p>Based in Los Angeles. Email is fastest — and there's a PDF if you need the formal version.</p>
+          <form class="contact-form" id="contact-form" hidden novalidate>
+            <div class="form-row">
+              <label>
+                <span>name</span>
+                <input type="text" name="name" autocomplete="name" maxlength="100" required>
+              </label>
+              <label>
+                <span>email</span>
+                <input type="email" name="email" autocomplete="email" maxlength="200" required>
+              </label>
+            </div>
+            <label>
+              <span>message</span>
+              <textarea name="message" rows="5" maxlength="3000" required></textarea>
+            </label>
+            <input class="hp-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="form-foot">
+              <button class="button primary" type="submit">send message</button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+        <div class="contact-side" data-reveal>
+          <ul class="certs">
+            <li>
+              <a href="assets/comptia-network-plus-certificate.pdf" download>
+                <span>CompTIA Network+</span><em>Jan 2026</em>
+              </a>
+            </li>
+            <li>
+              <a href="assets/comptia-a-plus-certificate.pdf" download>
+                <span>CompTIA A+</span><em>Oct 2024</em>
+              </a>
+            </li>
+            <li>
+              <a href="assets/world-class-customer-experience-certificate.pdf" download>
+                <span>World-Class Customer eXperience</span><em>certified</em>
+              </a>
+            </li>
+            <li class="cert-static">
+              <span>Eagle Scout</span><em>BSA</em>
+            </li>
+            <li class="cert-progress">
+              <span>CompTIA Security+</span><em>in progress</em>
+            </li>
+          </ul>
+          <div class="contact-methods" id="contact-methods"></div>
+          <div class="actions">
+            <a class="button" href="assets/logan-grass-resume.pdf" download>resume.pdf</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-pill">ops mesh: lg &lt; | &gt;</div>
+      <div class="footer-bar">
+        <div class="footer-cluster">
+          <span>&copy; <span id="year">2026</span> Logan Grass</span>
+          <span class="footer-separator">·</span>
+          <span class="nominal"><i></i> all services nominal</span>
+        </div>
+        <div class="footer-cluster footer-signal">
+          <span class="session" title="How long this page has been open">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>
+            <span id="session-time">00:00</span>
+          </span>
+          <span class="footer-separator">·</span>
+          <a id="commit-link" href="https://github.com/Logan-Grass/Logan-Grass.github.io" rel="noopener" title="Latest public GitHub commit">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v6"></path><path d="M12 15v6"></path></svg>
+            <span id="commit-sha">github</span>
+          </a>
+        </div>
+        <nav class="footer-links" id="footer-links" aria-label="Footer links"></nav>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
