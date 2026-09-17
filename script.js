@@ -1,94 +1,55 @@
-/* ------------------------------------------------------------------
-   EDIT THIS BLOCK — contact links, footer icons, and the schema.org
-   data are all generated from these values. Leave "" to skip one.
-   ------------------------------------------------------------------ */
-const CONTACT = {
-  email: "",                 // optional — leave "" to keep your address out of the page entirely
-  phone: "",                 // optional, e.g. "+1 (555) 123-4567"
-  linkedin: "",              // e.g. "https://www.linkedin.com/in/logangrass"
-  github: "https://github.com/Logan-Grass",
-  // Contact form relay. Managed at https://formspree.io — email lives in
-  // the Formspree dashboard, never in this file.
-  form: "https://formspree.io/f/mdaqdreg"
-};
+"use strict";
 
-const LOCATION = { lat: 34.0522, lng: -118.2437, zoom: 11 };
-const REPO = "Logan-Grass/Logan-Grass.github.io";
+const SITE = Object.freeze({
+  location: { lat: 34.0522, lng: -118.2437, zoom: 11 },
+  repo: "Logan-Grass/Logan-Grass.github.io",
+  timeZone: "America/Los_Angeles"
+});
 
-/* ------------------------------------------------------------------ */
+const TERMINAL_INTRO = [
+  ["whoami", "Logan Grass | systems & infrastructure"],
+  ["pwd", "/los-angeles/operations"],
+  ["uptime", "5+ years | MSP -> onsite operations"],
+  ["ls", "work  history  toolkit  lab  tickets  contact"]
+];
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TERMINAL_COMMANDS = Object.freeze({
+  help: { output: "about | work | history | toolkit | lab | tickets | contact | clear" },
+  clear: { action: "clear" },
+  about: { output: "Logan Grass | systems & infrastructure | Los Angeles, CA" },
+  whoami: { output: "Logan Grass" },
+  pwd: { output: "/los-angeles/operations" },
+  uptime: { output: "5+ years in production | status: available for the next hard problem", kind: "ok" },
+  ls: { output: "work  history  toolkit  lab  tickets  contact" },
+  work: { output: "opening selected work...", target: "#work", kind: "ok" },
+  history: { output: "opening work history...", target: "#experience", kind: "ok" },
+  toolkit: { output: "opening working toolkit...", target: "#stack", kind: "ok" },
+  stack: { output: "opening working toolkit...", target: "#stack", kind: "ok" },
+  lab: { output: "opening home operations lab...", target: "#lab", kind: "ok" },
+  tickets: { output: "opening resolved-ticket feedback...", target: "#feedback", kind: "ok" },
+  feedback: { output: "opening resolved-ticket feedback...", target: "#feedback", kind: "ok" },
+  contact: { output: "opening contact channel...", target: "#contact", kind: "ok" }
+});
 
-const ICONS = {
-  email: '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>',
-  phone: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1.1 1A16 16 0 0 1 4 5.1 1 1 0 0 1 5 4Z"></path></svg>',
-  linkedin: '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4"></path></svg>',
-  github: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path></svg>',
-  resume: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v4a2 2 0 0 0 2 2h4"></path><path d="M5 12V5a2 2 0 0 1 2-2h7l6 6v3"></path><path d="M12 17v-6"></path><path d="m9 14 3 3 3-3"></path><path d="M5 21h14"></path></svg>'
-};
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const select = (selector, root = document) => root.querySelector(selector);
+const selectAll = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+const scrollBehavior = prefersReducedMotion ? "auto" : "smooth";
 
-function buildMethods() {
-  const list = [];
-  if (CONTACT.email) {
-    list.push({ key: "email", href: `mailto:${CONTACT.email}`, label: CONTACT.email, note: "email" });
-  }
-  if (CONTACT.phone) {
-    list.push({
-      key: "phone",
-      href: `tel:${CONTACT.phone.replace(/[^\d+]/g, "")}`,
-      label: CONTACT.phone,
-      note: "phone"
-    });
-  }
-  if (CONTACT.linkedin) {
-    list.push({ key: "linkedin", href: CONTACT.linkedin, label: "LinkedIn", note: "linkedin" });
-  }
-  if (CONTACT.github) {
-    list.push({ key: "github", href: CONTACT.github, label: "github.com/Logan-Grass", note: "github" });
-  }
-  return list;
+function setCurrentYear() {
+  const year = select("#year");
+  if (year) year.textContent = new Date().getFullYear();
 }
-
-const isExternal = (key) => key === "linkedin" || key === "github";
-
-function renderContact() {
-  const target = document.querySelector("#contact-methods");
-  if (!target) return;
-
-  target.innerHTML = buildMethods()
-    .map(
-      (m) => `
-      <a class="contact-method" href="${m.href}"${isExternal(m.key) ? ' rel="noopener"' : ""}>
-        ${ICONS[m.key]}
-        <span class="contact-method-text">
-          <small>${m.note}</small>
-          <strong>${m.label}</strong>
-        </span>
-      </a>`
-    )
-    .join("");
-
-  if (!CONTACT.form && !CONTACT.email && !CONTACT.linkedin) {
-    const warn = document.createElement("p");
-    warn.className = "contact-warning";
-    warn.textContent =
-      "Set CONTACT.form (Formspree endpoint), email, or linkedin at the top of script.js — visitors currently have no way to reach you.";
-    target.prepend(warn);
-  }
-}
-
-/* ---------- contact form (static-host relay, keeps email out of the page) ---------- */
 
 function initContactForm() {
-  const form = document.querySelector("#contact-form");
+  const form = select("#contact-form");
   if (!form) return;
-  if (!CONTACT.form) return; // stays hidden until a relay endpoint is configured
 
-  form.hidden = false;
-  const status = form.querySelector("#form-status");
-  const submitButton = form.querySelector('button[type="submit"]');
+  const status = select("#form-status", form);
+  const submitButton = select('button[type="submit"]', form);
+  const honeypot = select('[name="_gotcha"]', form);
 
-  const setStatus = (message, kind) => {
+  const setStatus = (message, kind = "") => {
     if (!status) return;
     status.textContent = message;
     status.className = `form-status${kind ? ` is-${kind}` : ""}`;
@@ -96,402 +57,292 @@ function initContactForm() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    if (form.querySelector('[name="_gotcha"]').value) return; // honeypot tripped — drop silently
-
-    if (!form.reportValidity()) return;
+    if (honeypot?.value || !form.reportValidity()) return;
 
     submitButton.disabled = true;
-    setStatus("sending…");
+    setStatus("sending...");
 
     try {
-      const response = await fetch(CONTACT.form, {
-        method: "POST",
+      const response = await fetch(form.action, {
+        method: form.method,
         headers: { Accept: "application/json" },
         body: new FormData(form)
       });
 
-      if (!response.ok) throw new Error(`Relay responded ${response.status}`);
-
+      if (!response.ok) throw new Error(`Form relay responded ${response.status}`);
       form.reset();
-      setStatus("Message sent — I'll get back to you soon.", "ok");
+      setStatus("Message sent. I'll get back to you soon.", "ok");
     } catch {
-      setStatus("Something went wrong. Email me directly or try again in a minute.", "error");
+      setStatus("Something went wrong. Try again in a minute.", "error");
     } finally {
       submitButton.disabled = false;
     }
   });
 }
 
-function renderFooterLinks() {
-  const target = document.querySelector("#footer-links");
-  if (!target) return;
+function appendTerminalEntry(history, command, output, kind = "") {
+  const commandLine = document.createElement("span");
+  commandLine.className = "terminal-line terminal-command";
+  commandLine.textContent = `logan@la:~$ ${command}`;
 
-  target.innerHTML =
-    buildMethods()
-      .map(
-        (m) =>
-          `<a href="${m.href}" aria-label="${m.note}"${isExternal(m.key) ? ' rel="noopener"' : ""}>${ICONS[m.key]}</a>`
-      )
-      .join("") +
-    `<a href="assets/logan-grass-resume.pdf" download aria-label="Download resume">${ICONS.resume}</a>`;
+  const outputLine = document.createElement("span");
+  outputLine.className = `terminal-line terminal-output${kind ? ` is-${kind}` : ""}`;
+  outputLine.textContent = output;
+
+  history.append(commandLine, outputLine);
 }
 
-function renderStructuredData() {
-  const person = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Logan Grass",
-    jobTitle: "Systems Administrator & IT Infrastructure Specialist",
-    url: "https://logangrass.com",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Los Angeles",
-      addressRegion: "CA",
-      addressCountry: "US"
-    },
-    worksFor: { "@type": "Organization", name: "ApexIT Consulting, LLC" },
-    knowsAbout: [
-      "Windows Server administration",
-      "Active Directory",
-      "Microsoft 365",
-      "Microsoft Entra ID",
-      "Network administration",
-      "MikroTik RouterOS",
-      "VLAN segmentation",
-      "PowerShell automation",
-      "Proxmox virtualization",
-      "IT service management"
-    ],
-    hasCredential: [
-      { "@type": "EducationalOccupationalCredential", name: "CompTIA Network+", credentialCategory: "certification" },
-      { "@type": "EducationalOccupationalCredential", name: "CompTIA A+", credentialCategory: "certification" }
-    ]
+function initTerminal() {
+  const form = select("#terminal-form");
+  const input = select("#terminal-input");
+  const history = select("#terminal-history");
+  if (!form || !input || !history) return;
+
+  let introTimer;
+  let introActive = true;
+
+  const cancelIntro = () => {
+    introActive = false;
+    window.clearTimeout(introTimer);
   };
 
-  const sameAs = [CONTACT.linkedin, CONTACT.github].filter(Boolean);
-  if (CONTACT.email) person.email = CONTACT.email;
-  if (CONTACT.phone) person.telephone = CONTACT.phone;
-  if (sameAs.length) person.sameAs = sameAs;
+  const renderIntroLine = (index = 0) => {
+    if (!introActive || index >= TERMINAL_INTRO.length) return;
+    const [command, output] = TERMINAL_INTRO[index];
+    appendTerminalEntry(history, command, output, index === TERMINAL_INTRO.length - 1 ? "ok" : "");
 
-  const node = document.createElement("script");
-  node.type = "application/ld+json";
-  node.textContent = JSON.stringify(person);
-  document.head.appendChild(node);
-}
+    if (prefersReducedMotion) renderIntroLine(index + 1);
+    else introTimer = window.setTimeout(() => renderIntroLine(index + 1), 260);
+  };
 
-/* ---------- terminal ---------- */
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-const TERMINAL_LINES = [
-  { cmd: "whoami", out: ['<span class="t-accent">Logan Grass</span> — systems &amp; infrastructure'] },
-  { cmd: "uptime", out: ['<span class="t-out">5+ years in production · MSP → onsite ops</span>'] },
-  { cmd: "ls ~/certs", out: ['<span class="t-out">a+.pdf   network+.pdf   <span class="t-warn">security+ (in progress)</span></span>'] },
-  { cmd: "systemctl status logan", out: ['<span class="t-ok">●</span> <span class="t-out">active (running) — Los Angeles, CA</span>'] }
-];
+    const command = input.value.trim().toLowerCase();
+    input.value = "";
+    if (!command) return;
 
-function runTerminal() {
-  const body = document.querySelector("#terminal-body");
-  if (!body) return;
+    cancelIntro();
+    const entry = Object.hasOwn(TERMINAL_COMMANDS, command) ? TERMINAL_COMMANDS[command] : null;
 
-  const promptHtml = '<span class="t-prompt">logan@la</span><span class="t-out">:~$</span> ';
-
-  if (reducedMotion) {
-    body.innerHTML =
-      TERMINAL_LINES.map((l) => promptHtml + `<span class="t-cmd">${l.cmd}</span>\n` + l.out.join("\n") + "\n").join("") +
-      promptHtml +
-      '<span class="terminal-caret"></span>';
-    return;
-  }
-
-  let html = "";
-  let lineIndex = 0;
-
-  const showPromptAndType = () => {
-    if (lineIndex >= TERMINAL_LINES.length) {
-      body.innerHTML = html + promptHtml + '<span class="terminal-caret"></span>';
+    if (!entry) {
+      appendTerminalEntry(history, command, `command not found: ${command} | try: help`, "warn");
       return;
     }
 
-    const line = TERMINAL_LINES[lineIndex];
-    let charIndex = 0;
-
-    const typeChar = () => {
-      if (charIndex <= line.cmd.length) {
-        body.innerHTML =
-          html +
-          promptHtml +
-          `<span class="t-cmd">${line.cmd.slice(0, charIndex)}</span>` +
-          '<span class="terminal-caret"></span>';
-        charIndex += 1;
-        setTimeout(typeChar, 34 + Math.random() * 40);
-      } else {
-        html += promptHtml + `<span class="t-cmd">${line.cmd}</span>\n`;
-        setTimeout(printOutput, 220);
-      }
-    };
-
-    const printOutput = () => {
-      html += line.out.join("\n") + "\n";
-      body.innerHTML = html + '<span class="terminal-caret"></span>';
-      lineIndex += 1;
-      setTimeout(showPromptAndType, 340);
-    };
-
-    typeChar();
-  };
-
-  setTimeout(showPromptAndType, 500);
-}
-
-/* ---------- count-up stats ---------- */
-
-function initCounters() {
-  const counters = document.querySelectorAll("[data-count]");
-  if (!counters.length) return;
-
-  const animate = (node) => {
-    const target = Number(node.dataset.count);
-    if (reducedMotion || !Number.isFinite(target)) {
-      node.textContent = String(target);
+    if (entry.action === "clear") {
+      history.replaceChildren();
       return;
     }
 
-    const duration = 900;
-    const start = performance.now();
+    appendTerminalEntry(history, command, entry.output, entry.kind);
+    if (entry.target) select(entry.target)?.scrollIntoView({ behavior: scrollBehavior });
+  });
 
-    const frame = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      node.textContent = String(Math.round(target * eased));
-      if (progress < 1) requestAnimationFrame(frame);
-    };
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.isComposing) return;
+    event.preventDefault();
+    form.requestSubmit();
+  });
 
-    requestAnimationFrame(frame);
+  renderIntroLine();
+}
+
+function initFeedback() {
+  const items = selectAll(".feedback-item");
+  const buttons = selectAll("[data-feedback-filter]");
+  const search = select("#feedback-search");
+  const count = select("#feedback-count");
+  if (!items.length || !buttons.length || !search || !count) return;
+
+  let activeFilter = "all";
+
+  const update = () => {
+    const query = search.value.trim().toLowerCase();
+    let visible = 0;
+
+    items.forEach((item) => {
+      const matchesFilter = activeFilter === "all" || item.dataset.feedbackCategory === activeFilter;
+      const matchesQuery = !query || item.textContent.toLowerCase().includes(query);
+      item.hidden = !(matchesFilter && matchesQuery);
+      if (!item.hidden) visible += 1;
+    });
+
+    count.textContent = `${visible} of ${items.length} responses`;
   };
 
-  if (!("IntersectionObserver" in window)) {
-    counters.forEach((node) => (node.textContent = node.dataset.count));
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        animate(entry.target);
-        observer.unobserve(entry.target);
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.feedbackFilter;
+      buttons.forEach((candidate) => {
+        candidate.setAttribute("aria-pressed", String(candidate === button));
       });
-    },
-    { threshold: 0.4 }
-  );
+      update();
+    });
+  });
 
-  counters.forEach((node) => observer.observe(node));
+  search.addEventListener("input", update);
+  update();
 }
-
-/* ---------- scroll reveal ---------- */
 
 function initReveal() {
-  const nodes = document.querySelectorAll("[data-reveal]");
+  const nodes = selectAll("[data-reveal]");
   if (!nodes.length) return;
 
-  if (!("IntersectionObserver" in window) || reducedMotion) {
-    document.body.classList.add("no-observer");
+  const revealImmediately = prefersReducedMotion
+    || !("IntersectionObserver" in window)
+    || window.matchMedia("(max-width: 760px)").matches;
+
+  if (revealImmediately) {
+    nodes.forEach((node) => node.classList.add("revealed"));
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("revealed");
-        observer.unobserve(entry.target);
-      });
-    },
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
-  );
+  document.documentElement.classList.add("js");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("revealed");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
 
   nodes.forEach((node) => observer.observe(node));
 }
 
-/* ---------- marquee (duplicate content for seamless loop) ---------- */
-
-function initMarquee() {
-  document.querySelectorAll("[data-marquee]").forEach((track) => {
-    track.innerHTML += track.innerHTML;
-    track.querySelectorAll("blockquote").forEach((quote, index) => {
-      if (index >= track.children.length / 2) quote.setAttribute("aria-hidden", "true");
-    });
-  });
-}
-
-/* ---------- progress bar ---------- */
-
 function initProgress() {
-  const bar = document.querySelector("#progress-bar");
+  const bar = select("#progress-bar");
   if (!bar) return;
 
+  let framePending = false;
   const update = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = max > 0 ? `${(window.scrollY / max) * 100}%` : "0%";
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${maxScroll > 0 ? window.scrollY / maxScroll : 0})`;
+    framePending = false;
   };
 
-  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("scroll", () => {
+    if (framePending) return;
+    framePending = true;
+    window.requestAnimationFrame(update);
+  }, { passive: true });
+
   update();
 }
 
-/* ---------- clock + session ---------- */
-
-function startClock() {
-  const nodes = [document.querySelector("#local-time"), document.querySelector("#local-time-2")].filter(Boolean);
-  if (!nodes.length) return;
+function initClock() {
+  const clock = select("#local-time");
+  if (!clock) return;
 
   const format = new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false,
-    timeZone: "America/Los_Angeles"
+    hourCycle: "h23",
+    timeZone: SITE.timeZone
   });
 
   const tick = () => {
-    const now = format.format(new Date());
-    nodes.forEach((node) => (node.textContent = node.id === "local-time-2" ? `${now} PT` : now));
+    clock.textContent = `${format.format(new Date())} PT`;
   };
 
   tick();
-  setInterval(tick, 1000);
+  window.setInterval(tick, 1000);
 }
-
-const pad = (value) => String(value).padStart(2, "0");
-
-function startSessionTimer() {
-  const node = document.querySelector("#session-time");
-  if (!node) return;
-
-  const started = Date.now();
-
-  const tick = () => {
-    const elapsed = Math.floor((Date.now() - started) / 1000);
-    const minutes = Math.floor(elapsed / 60);
-    node.textContent =
-      minutes >= 60
-        ? `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}:${pad(elapsed % 60)}`
-        : `${pad(minutes)}:${pad(elapsed % 60)}`;
-  };
-
-  tick();
-  setInterval(tick, 1000);
-}
-
-/* ---------- map ---------- */
 
 function initMap() {
-  const container = document.querySelector("#la-map");
-  if (!container || typeof L === "undefined") return;
+  const container = select("#la-map");
+  if (!container) return;
 
-  const loading = container.querySelector(".map-loading");
+  const loading = select(".map-loading", container);
+  const leaflet = window.L;
+  if (!leaflet) {
+    if (loading) loading.textContent = "Los Angeles, CA";
+    return;
+  }
 
-  const map = L.map(container, {
-    center: [LOCATION.lat, LOCATION.lng],
-    zoom: LOCATION.zoom,
+  const { lat, lng, zoom } = SITE.location;
+  const map = leaflet.map(container, {
+    center: [lat, lng],
+    zoom,
     zoomControl: true,
     scrollWheelZoom: false,
     attributionControl: true
   });
 
-  map.attributionControl.setPrefix(false); // required OSM/CARTO credit stays; Leaflet self-plug goes
-
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+  map.attributionControl.setPrefix(false);
+  leaflet.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
     attribution: "&copy; OpenStreetMap &copy; CARTO",
     subdomains: "abcd",
     maxZoom: 19
-  })
-    .on("load", () => loading && loading.remove())
-    .addTo(map);
+  }).once("load", () => loading?.remove()).addTo(map);
 
-  L.marker([LOCATION.lat, LOCATION.lng], {
-    icon: L.divIcon({ className: "map-marker", iconSize: [12, 12] }),
+  leaflet.marker([lat, lng], {
+    icon: leaflet.divIcon({ className: "map-marker", iconSize: [12, 12] }),
     keyboard: false
   }).addTo(map);
 
-  // If tiles are blocked or slow, stop showing the loading text forever.
-  setTimeout(() => loading && loading.remove(), 4000);
-
-  document.querySelectorAll("[data-map-reset]").forEach((button) => {
+  window.setTimeout(() => loading?.remove(), 4000);
+  selectAll("[data-map-reset]").forEach((button) => {
     button.addEventListener("click", () => {
-      map.flyTo([LOCATION.lat, LOCATION.lng], LOCATION.zoom, { duration: 0.6 });
+      map.flyTo([lat, lng], zoom, { duration: prefersReducedMotion ? 0 : 0.6 });
     });
   });
 }
 
-/* ---------- latest commit ---------- */
-
 async function loadLatestCommit() {
-  const shaNode = document.querySelector("#commit-sha");
-  const link = document.querySelector("#commit-link");
-  if (!shaNode || !link) return;
+  const sha = select("#commit-sha");
+  const link = select("#commit-link");
+  if (!sha || !link) return;
 
   try {
-    const response = await fetch(`https://api.github.com/repos/${REPO}/commits?per_page=1`, {
+    const response = await fetch(`https://api.github.com/repos/${SITE.repo}/commits?per_page=1`, {
       headers: { Accept: "application/vnd.github+json" }
     });
     if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
 
     const [commit] = await response.json();
-    if (!commit || !commit.sha) throw new Error("No commit returned");
+    if (!commit?.sha) throw new Error("No commit returned");
 
-    shaNode.textContent = commit.sha.slice(0, 7);
+    sha.textContent = commit.sha.slice(0, 7);
     link.href = commit.html_url;
-    if (commit.commit && commit.commit.message) {
-      link.title = commit.commit.message.split("\n")[0];
-    }
+    link.title = commit.commit?.message?.split("\n")[0] || "Latest public GitHub commit";
   } catch {
-    // Unauthenticated GitHub API is rate limited; the static fallback link stays.
-    shaNode.textContent = "github";
+    sha.textContent = "github";
   }
 }
 
-/* ---------- current nav section ---------- */
-
-function markCurrentSection() {
-  const links = Array.from(document.querySelectorAll(".nav-links a"));
+function initSectionNavigation() {
+  const links = selectAll(".nav-links a");
   const sections = links
-    .map((link) => document.querySelector(link.getAttribute("href")))
+    .map((link) => select(link.getAttribute("href")))
     .filter(Boolean);
 
   if (!sections.length || !("IntersectionObserver" in window)) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((link) =>
-          link.classList.toggle("is-current", link.getAttribute("href") === `#${entry.target.id}`)
-        );
-      });
-    },
-    { rootMargin: "-40% 0px -55% 0px" }
-  );
+  const observer = new IntersectionObserver((entries) => {
+    const current = entries.find((entry) => entry.isIntersecting);
+    if (!current) return;
+
+    links.forEach((link) => {
+      link.classList.toggle("is-current", link.hash === `#${current.target.id}`);
+    });
+  }, { rootMargin: "-38% 0px -56% 0px" });
 
   sections.forEach((section) => observer.observe(section));
 }
 
-/* ---------- boot ---------- */
+function initPage() {
+  setCurrentYear();
+  initReveal();
+  initContactForm();
+  initTerminal();
+  initFeedback();
+  initProgress();
+  initClock();
+  initMap();
+  loadLatestCommit();
+  initSectionNavigation();
+}
 
-const yearNode = document.querySelector("#year");
-if (yearNode) yearNode.textContent = new Date().getFullYear();
-
-renderContact();
-initContactForm();
-renderFooterLinks();
-renderStructuredData();
-runTerminal();
-initCounters();
-initReveal();
-initMarquee();
-initProgress();
-startClock();
-startSessionTimer();
-initMap();
-loadLatestCommit();
-markCurrentSection();
+initPage();

@@ -2,21 +2,25 @@
 
 Personal site of Logan Grass — systems & infrastructure. Live at <https://logangrass.com>.
 
-Static single-page site: no build step, no dependencies, no framework. HTML, CSS, and a
-little vanilla JS.
+Static single-page site with no build step, package dependencies, or framework. The HTML
+is the canonical content source; CSS owns presentation, and vanilla JavaScript adds
+progressive enhancement.
 
 ## Editing
 
 | What | Where |
 |---|---|
-| Page content (experience, projects, stack, reviews) | `index.html` |
-| Contact links & Formspree endpoint | `CONTACT` block at the top of `script.js` |
-| Styles (incl. print + reduced-motion) | `styles.css` |
+| Page content, links, metadata, and Formspree endpoint | `index.html` |
+| Styles, responsive layout, print, and reduced motion | `styles.css` |
+| Terminal, filters, map, form enhancement, and live status | `script.js` |
 | Resume PDF & certificates | `assets/` |
 
-The contact form relays through Formspree, so the email address never appears in the
-page source. The map is Leaflet + CARTO tiles; the OSM/CARTO attribution is a license
-requirement and stays.
+The contact form posts directly to Formspree and is enhanced with inline status messages
+when JavaScript is available. The map is Leaflet + CARTO tiles; the OSM/CARTO attribution
+is a license requirement and stays.
+
+Project diagrams use locally stored Lucide icons in `assets/icons/`, with their ISC
+license included in that directory. They require no JavaScript or external icon service.
 
 ## Deploying
 
@@ -26,10 +30,10 @@ root to GitHub Pages. Nothing to build. Live in under a minute.
 ## Local preview
 
 ```powershell
-npx -y http-server -p 8080 -c-1
+npx -y http-server . -p 3000 -c-1
 ```
 
-Open <http://localhost:8080>.
+Open <http://localhost:3000>.
 
 ## Notes
 
