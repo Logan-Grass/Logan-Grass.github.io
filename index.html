@@ -71,7 +71,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@400;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="styles.css?v=8">
   </head>
   <body>
     <div class="progress" aria-hidden="true"><span class="progress-bar" id="progress-bar"></span></div>
@@ -116,7 +116,7 @@
           </div>
           <div class="location-card">
             <button class="location-title" type="button" data-map-reset aria-label="Reset map to Los Angeles"><span class="pin-icon" aria-hidden="true"></span><strong>currently operating from</strong></button>
-            <div class="map-card" id="la-map" role="region" aria-label="Map of Los Angeles"><div class="map-loading">loading map...</div><span class="map-label">LOS ANGELES</span></div>
+            <div class="map-card" id="la-map" role="region" aria-label="Map of Los Angeles"><a class="map-fallback" href="https://www.openstreetmap.org/#map=11/34.0522/-118.2437" target="_blank" rel="noopener">View Los Angeles on OpenStreetMap</a><span class="map-label">LOS ANGELES</span></div>
             <div class="location-row"><button class="location-place" type="button" data-map-reset>Los Angeles, CA</button><span class="mono muted" id="local-time"></span></div>
           </div>
         </aside>
@@ -308,6 +308,6 @@
       </div>
     </footer>
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script defer src="script.js?v=6"></script>
+    <script defer src="script.js?v=8"></script>
   </body>
 </html>

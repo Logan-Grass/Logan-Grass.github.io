@@ -428,14 +428,14 @@ h3 {
 
 .pin-icon { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 4px rgba(243, 139, 168, 0.13); }
 .map-card { position: relative; height: 190px; background: var(--crust); }
-.map-loading { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; color: var(--overlay); font-family: var(--mono); font-size: 0.72rem; }
+.map-fallback { position: absolute; inset: 0; z-index: 650; display: grid; place-items: center; padding: 40px 48px; background: var(--crust); color: var(--lavender); font-family: var(--mono); font-size: 0.72rem; text-align: center; }
 .map-label { position: absolute; bottom: 8px; left: 12px; z-index: 500; color: var(--text); font-family: var(--mono); font-size: 0.62rem; font-weight: 700; pointer-events: none; text-shadow: 0 1px 8px var(--crust); }
 .location-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 13px; border-top: 1px solid var(--line); }
 .location-place { padding: 0; border: 0; background: none; color: var(--text); font-weight: 600; cursor: pointer; }
 .location-place:hover { color: var(--blue); }
 .location-row .mono { font-size: 0.74rem; }
 .leaflet-container { background: var(--crust); font-family: var(--mono); }
-.leaflet-tile-pane { filter: saturate(0.55) brightness(0.78) contrast(1.06); }
+.leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.78) contrast(0.85); }
 .leaflet-control-attribution { background: rgba(17, 17, 27, 0.78) !important; color: var(--overlay) !important; font-size: 9px !important; }
 .leaflet-control-attribution a { color: var(--subtext) !important; }
 .leaflet-control-zoom a { border-color: var(--surface-0) !important; background: rgba(17, 17, 27, 0.92) !important; color: var(--subtext) !important; }

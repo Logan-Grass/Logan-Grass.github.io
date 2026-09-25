@@ -254,12 +254,9 @@ function initMap() {
   const container = select("#la-map");
   if (!container) return;
 
-  const loading = select(".map-loading", container);
+  const fallback = select(".map-fallback", container);
   const leaflet = window.L;
-  if (!leaflet) {
-    if (loading) loading.textContent = "Los Angeles, CA";
-    return;
-  }
+  if (!leaflet) return;
 
   const { lat, lng, zoom } = SITE.location;
   const map = leaflet.map(container, {
@@ -271,18 +268,16 @@ function initMap() {
   });
 
   map.attributionControl.setPrefix(false);
-  leaflet.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution: "&copy; OpenStreetMap &copy; CARTO",
-    subdomains: "abcd",
+  leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19
-  }).once("load", () => loading?.remove()).addTo(map);
+  }).once("tileload", () => fallback?.remove()).addTo(map);
 
   leaflet.marker([lat, lng], {
     icon: leaflet.divIcon({ className: "map-marker", iconSize: [12, 12] }),
     keyboard: false
   }).addTo(map);
 
-  window.setTimeout(() => loading?.remove(), 4000);
   selectAll("[data-map-reset]").forEach((button) => {
     button.addEventListener("click", () => {
       map.flyTo([lat, lng], zoom, { duration: prefersReducedMotion ? 0 : 0.6 });

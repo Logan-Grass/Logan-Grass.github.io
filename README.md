@@ -16,8 +16,11 @@ progressive enhancement.
 | Resume PDF & certificates | `assets/` |
 
 The contact form posts directly to Formspree and is enhanced with inline status messages
-when JavaScript is available. The map is Leaflet + CARTO tiles; the OSM/CARTO attribution
-is a license requirement and stays.
+when JavaScript is available. The map uses Leaflet + standard OpenStreetMap tiles,
+styled dark with CSS and requiring no API key. Keep the visible attribution and
+follow the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/):
+allow browser caching and referrers, and do not prefetch or bulk-download tiles.
+An OpenStreetMap link remains available if the map library or tiles fail to load.
 
 Project diagrams use locally stored Lucide icons in `assets/icons/`, with their ISC
 license included in that directory. They require no JavaScript or external icon service.
