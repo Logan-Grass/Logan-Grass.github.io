@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check site integrity and public-content safety
+        run: python3 -m unittest discover -s tests -v
+
       - uses: actions/configure-pages@v5
 
       # No build step — this is a static site served straight from the repo root.

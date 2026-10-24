@@ -1,0 +1,15 @@
+/* Public-safe excerpts from the owner's private infrastructure source. */
+.lab-evidence { margin-block: 40px; }
+.lab-evidence > h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.evidence-note { max-width: 80ch; color: var(--subtext-1); margin-bottom: 20px; }
+.evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.evidence-card { min-width: 0; padding: 24px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--panel-bg); }
+.evidence-card h4 { font-size: 1.15rem; margin-bottom: 12px; }
+.evidence-card > p { color: var(--subtext-1); margin-block: 12px; }
+.evidence-source { font: 0.75rem/1.7 var(--mono); color: var(--lavender) !important; overflow-wrap: anywhere; }
+.evidence-card pre { margin-block: 18px; padding: 16px; background: var(--crust); border-left: 2px solid var(--lavender); border-radius: var(--radius-sm); max-width: 100%; overflow-x: auto; white-space: pre; font: 0.8rem/1.7 var(--mono); }
+.evidence-card pre code { font: inherit; }
+.evidence-card a { display: flex; align-items: center; min-width: 0; max-width: 100%; min-height: 44px; color: var(--lavender); text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
+@media (max-width: 850px) { .evidence-grid { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .evidence-card { padding: 18px; } }
+@media print { .evidence-card { background: white; border: 1px solid #777; break-inside: avoid; } .evidence-card pre { color: black; background: #eee; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; } .evidence-note, .evidence-card > p { color: #333 !important; } }
