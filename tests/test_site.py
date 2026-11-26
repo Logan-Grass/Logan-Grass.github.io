@@ -150,6 +150,38 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("Casdoor", self.source + script)
         self.assertIn("Authelia", self.source)
 
+    def test_every_svg_is_titled_or_hidden(self):
+        # Diagrams are informative images: each needs a <title> and <desc> wired up
+        # through aria-labelledby. Decorative icons must be hidden from assistive tech.
+        svgs = re.findall(r"<svg\b[^>]*>.*?</svg>", self.source, flags=re.S)
+        self.assertGreaterEqual(len([s for s in svgs if 'role="img"' in s]), 6)
+        for svg in svgs:
+            with self.subTest(svg=svg[:80]):
+                if 'aria-hidden="true"' in svg.split(">", 1)[0]:
+                    continue
+                self.assertIn('role="img"', svg.split(">", 1)[0])
+                title = re.search(r'<title id="([^"]+)">[^<]+</title>', svg)
+                desc = re.search(r'<desc id="([^"]+)">[^<]+</desc>', svg)
+                self.assertTrue(title and desc)
+                self.assertIn(f'aria-labelledby="{title.group(1)} {desc.group(1)}"', svg)
+                self.assertNotRegex(svg, r"#[0-9a-fA-F]{3,6}\b")
+
+    def test_current_role_and_private_job_details(self):
+        # Promoted to Project Manager on 2026-11-18. Offer-letter details stay private.
+        script = (ROOT / "script.js").read_text()
+        self.assertIn("Project Manager", self.source)
+        self.assertIn('"jobTitle": "Project Manager"', self.source)
+        self.assertIn("Nov 2026", self.source)
+        self.assertNotIn("Help Desk Engineer, Tier II <span>", self.source)
+        text = self.source + script
+        self.assertNotRegex(text, r"(?i)\$\s?\d|\b(salary|hourly|bonus|401k|PTO|benefits)\b")
+        self.assertNotRegex(text, r"(?i)\bLCPs?\b|centralized services|AI initiative|75\s?%")
+
+    def test_no_runbook_mentions(self):
+        # Owner: the page does not need runbooks.
+        script = (ROOT / "script.js").read_text()
+        self.assertNotRegex(self.source + script, r"(?i)runbook")
+
     def test_full_width_header_does_not_use_scrollbar_inclusive_vw(self):
         css = (ROOT / "styles.css").read_text()
         self.assertNotRegex(css, r"calc\(50%\s*-\s*50vw\)")

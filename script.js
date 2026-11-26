@@ -95,10 +95,10 @@ const TERMINAL_COMMANDS = Object.freeze({
     "this shell   ls  pwd  date  map  clear  help",
     { text: "Commands are matched locally; nothing is executed.", kind: "dim" }
   ],
-  whoami: () => ["Logan Grass, systems & infrastructure, Los Angeles"],
+  whoami: () => ["Logan Grass, IT project manager, Los Angeles"],
   role: () => [
-    "MSP Help Desk Engineer, Tier II @ AllSafe IT (Pasadena, since Sep 2026)",
-    "Tier II remote and onsite support: workstations, servers, networks, applications."
+    "Project Manager @ AllSafe IT (Pasadena, since Nov 2026)",
+    "client projects from signed quote to closeout; still hands-on with systems and networks"
   ],
   certs: () => [
     "CompTIA Network+   Jan 2026",
@@ -108,20 +108,20 @@ const TERMINAL_COMMANDS = Object.freeze({
   ],
   uptime: () => [
     "in IT operations since 2021 (5+ years)",
-    "help desk → help desk manager → field escalation → embedded support → Tier II"
+    "help desk → help desk manager → field escalation → embedded support → Tier II → project manager"
   ],
   pwd: () => ["/los-angeles/operations"],
   ls: () => [{ text: "lab/  work/  history/  toolkit/  tickets/  contact/  resume.pdf", kind: "dirs" }],
   date: () => [laDate.format(new Date())],
   resume: () => [{ node: resumeLink() }, { text: "PDF download, current revision.", kind: "dim" }],
   lab: () => [
-    "Proxmox VE + Debian/Ubuntu LXC, changed through Forgejo → Actions → Ansible",
+    "Proxmox + Debian/Ubuntu containers; changes go Forgejo → Actions → Ansible",
     "access: Authelia SSO for people, short-lived OpenBao SSH certificates for automation",
     "network: management, core, edge and automation VLANs, default-deny between zones",
     "patching: daily pull request with exact package versions, snapshot before each container",
     "signals: Wazuh, Prometheus, Blackbox, Grafana; alerts wake the coordinating agent",
     "agents: T3 Code + Pi threads and Renovate merge only at the exact checked, reviewed commit",
-    { text: "snapshot from October–November 2026 runbooks, not live telemetry", kind: "dim" },
+    { text: "what I'd built by November 2026, not a live status page", kind: "dim" },
     { text: "→ ~/lab", kind: "ok", target: "#lab" }
   ],
   work: () => [
@@ -131,7 +131,7 @@ const TERMINAL_COMMANDS = Object.freeze({
     { text: "→ ~/work", kind: "ok", target: "#work" }
   ],
   history: () => [
-    "2026–now   AllSafe IT          MSP Help Desk Engineer, Tier II",
+    "2026–now   AllSafe IT          Project Manager (since Nov), Tier II engineer before that",
     "2026       ApexIT Consulting   Service Delivery Specialist",
     "2021–2026  911 IT              Technician → Manager → Field Specialist II",
     { text: "→ ~/history", kind: "ok", target: "#experience" }
