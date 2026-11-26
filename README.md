@@ -29,7 +29,9 @@ spacing, and navigation without removing personality.
 The November 2026 pass applied the anti-template guidance from
 [Impeccable](https://github.com/pbakaus/impeccable): sections read like a man page, with the
 section name (`~/lab`) as the heading in a left margin and one readable column beside it.
-Rules and spacing group content; the terminal and map are the only boxed panels. Do not
+Rules and spacing group content; the terminal and map are the only boxed panels. Body
+text is 17px or larger, secondary text meets WCAG AA contrast on the Mocha background, and
+labels are sentence case in the sans face. Do not
 reintroduce eyebrow labels or section numbers above headings, grids of identical cards,
 fake window-control dots, decorative glass blur, one-sided accent bars, or a scroll-reveal
 animation on every section. `tests/test_site.py` guards the mechanical parts of this.
@@ -88,15 +90,17 @@ necessary excerpt. Do not replace genuine evidence with staged dashboards or inv
   fallback; JavaScript adds inline success/error feedback. Do not send test messages to
   the real endpoint during automated checks: intercept requests locally instead.
 - Downloadable resume and certificates remain in `assets/`.
-- Local Lucide SVG assets retain their ISC license in `assets/icons/LICENSE`.
+- The two inline contact icons are Lucide paths (ISC license).
 - The terminal is a browser-only interaction with a fixed command vocabulary. Never execute
   input as JavaScript, send it to a shell, or insert it as untrusted HTML.
 - Leaflet and OpenStreetMap provide the interactive city-level Los Angeles map. No user
   location permission is required. Retain attribution, a usable fallback link, and sensible
   behaviour if the CDN or tile network is unavailable. Follow the OpenStreetMap tile usage
   policy: https://operations.osmfoundation.org/policies/tiles/ (no bulk downloads/prefetch).
-- JetBrains Mono is the only web font; Google Fonts loads it with monospace fallbacks.
-  Local icons need no remote icon service.
+- Fonts are self-hosted in `assets/fonts/` under the SIL Open Font License (licence files
+  beside them): IBM Plex Sans for reading text, JetBrains Mono for the terminal, navigation,
+  section names and code. The owner chose a readable sans for body text on 2026-11-26; do not
+  return to mono-only body text or load fonts from a third-party CDN.
 - `assets/og-card.svg` is the editable source for the 1200×630 PNG social-sharing card.
 
 ## Preview and checks

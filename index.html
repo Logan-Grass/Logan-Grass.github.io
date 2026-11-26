@@ -72,11 +72,9 @@
       }
     </script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="styles.css?v=14">
+    <link rel="stylesheet" href="styles.css?v=15">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -107,12 +105,12 @@
           <!-- Role and certifications stay above the workbench at every width;
                scope and lab follow it in reading order. -->
           <dl class="facts facts-primary" aria-label="Current role and certifications">
-            <div class="is-current"><dt>role</dt><dd>MSP Help Desk Engineer, Tier II <span>AllSafe IT, Pasadena, since Sep 2026</span></dd></div>
-            <div><dt>certs</dt><dd>CompTIA A+, Network+ <span>Security+ in progress</span></dd></div>
+            <div class="is-current"><dt>Role</dt><dd>MSP Help Desk Engineer, Tier II <span>AllSafe IT, Pasadena, since Sep 2026</span></dd></div>
+            <div><dt>Certs</dt><dd>CompTIA A+, Network+ <span>Security+ in progress</span></dd></div>
           </dl>
         </div>
 
-        <div class="workbench" aria-label="Workbench">
+        <div class="workbench">
           <section class="panel terminal" aria-label="Interactive terminal">
             <header class="panel-bar">
               <p class="panel-title">logan@la:~ <span class="panel-sub">tty1</span></p>
@@ -158,8 +156,8 @@
           </section>
         </div>
         <dl class="facts facts-more" aria-label="Background">
-          <div><dt>scope</dt><dd>Support, systems, network <span>MSP and onsite operations since 2021</span></dd></div>
-          <div><dt>lab</dt><dd>Git-controlled Proxmox estate <span>notes current to November 2026</span></dd></div>
+          <div><dt>Scope</dt><dd>Support, systems, network <span>MSP and onsite operations since 2021</span></dd></div>
+          <div><dt>Lab</dt><dd>Git-controlled Proxmox estate <span>notes current to November 2026</span></dd></div>
         </dl>
       </section>
 
@@ -171,9 +169,9 @@
           <div class="lab-intro">
             <p>A personal Proxmox environment where I practise the operational habits I bring to work: changes go through Git, new machines enroll themselves into monitoring, access is short-lived, and every change is written down.</p>
             <dl class="meta-list">
-              <div><dt>scope</dt><dd>Personal project, separate from client work</dd></div>
-              <div><dt>snapshot</dt><dd>From lab runbooks and merged changes, <time datetime="2026-10">October</time> to <time datetime="2026-11">November 2026</time>. Not live telemetry.</dd></div>
-              <div><dt>source of truth</dt><dd>Forgejo repositories, applied by Forgejo Actions</dd></div>
+              <div><dt>Scope</dt><dd>Personal project, separate from client work</dd></div>
+              <div><dt>Snapshot</dt><dd>From lab runbooks and merged changes, <time datetime="2026-10">October</time> to <time datetime="2026-11">November 2026</time>. Not live telemetry.</dd></div>
+              <div><dt>Source of truth</dt><dd>Forgejo repositories, applied by Forgejo Actions</dd></div>
             </dl>
           </div>
 
@@ -181,100 +179,88 @@
             <figcaption id="topology-title">How a request reaches a service, top to bottom, and what runs beside the path.</figcaption>
             <div class="topology-grid">
               <dl class="topo-list topo-path">
-                <div><dt>edge</dt><dd>MikroTik RouterOS, CrowdSec, WireGuard restricted to approved peers</dd></div>
-                <div><dt>naming</dt><dd>Blocky internal DNS</dd></div>
-                <div><dt>ingress</dt><dd>Caddy reverse proxy, HTTPS on the inside</dd></div>
-                <div><dt>identity</dt><dd>Casdoor SSO, native OIDC or Caddy forward-auth</dd></div>
-                <div><dt>compute</dt><dd>Proxmox VE, Debian and Ubuntu LXC guests</dd></div>
+                <div><dt>Edge</dt><dd>MikroTik RouterOS, CrowdSec, WireGuard restricted to approved peers</dd></div>
+                <div><dt>Naming</dt><dd>Blocky internal DNS</dd></div>
+                <div><dt>Ingress</dt><dd>Caddy reverse proxy, HTTPS on the inside</dd></div>
+                <div><dt>Identity</dt><dd>Authelia SSO, native OIDC or Caddy forward-auth</dd></div>
+                <div><dt>Compute</dt><dd>Proxmox VE, Debian and Ubuntu LXC guests in separate VLAN zones</dd></div>
               </dl>
               <dl class="topo-list topo-side">
-                <div><dt>control</dt><dd>Forgejo → Forgejo Actions → Ansible; OpenBao short-lived SSH certificates</dd></div>
-                <div><dt>signals</dt><dd>Wazuh, Prometheus and node exporter, Blackbox, Grafana</dd></div>
-                <div><dt>knowledge</dt><dd>Homelable, OpenViking, Ollama, MCP</dd></div>
-                <div><dt>agents</dt><dd>AI coding agents and Renovate, working through Forgejo pull requests</dd></div>
+                <div><dt>Control</dt><dd>Forgejo, Forgejo Actions and Ansible; OpenBao short-lived SSH certificates</dd></div>
+                <div><dt>Patching</dt><dd>A daily pull request with exact package versions for every running container</dd></div>
+                <div><dt>Signals</dt><dd>Wazuh, Prometheus, Blackbox and Grafana, with alerts that wake an agent</dd></div>
+                <div><dt>Agents</dt><dd>T3 Code and Pi agent threads, plus Renovate, all working through pull requests</dd></div>
+                <div><dt>Knowledge</dt><dd>Homelable, OpenViking memory, Ollama on a local GPU, MCP</dd></div>
               </dl>
             </div>
           </figure>
 
           <h3 class="sub-head">Decisions, and the check behind each</h3>
-          <p class="sub-note">Each record has the problem, the decision, and how it is verified. Checks describe the method from the runbooks, not a live result.</p>
+          <p class="sub-note">Each record has the problem, the decision, and how it is verified. Checks describe the method from the runbooks, not a live result. Every change follows the same path:</p>
+          <ol class="pipe" aria-label="Change pipeline"><li>git commit</li><li>pull request and checks</li><li>Forgejo Actions</li><li>Ansible</li><li>read back</li></ol>
           <ol class="records" aria-label="Lab design decisions">
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/change-control</p>
-                <h4>Infrastructure that changes through Git, not SSH sessions.</h4>
-              </div>
+              <h4>Infrastructure that changes through Git, not SSH sessions.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>Hand edits over SSH drift away from the documentation and leave no clean way back.</dd></div>
-                <div><dt>decision</dt><dd>Host configuration, proxy routes and DNS records live in Forgejo. Forgejo Actions runs Ansible to apply them across the LXC fleet, so every change has a commit, a pipeline run and a revert path.</dd></div>
-                <div><dt>check</dt><dd>Repeat the run against a healthy host: an idempotent playbook should report no changes.</dd></div>
-                <div class="pipe-row"><dt>path</dt><dd><ol class="pipe" aria-label="Change pipeline"><li>git commit</li><li>Forgejo Actions</li><li>Ansible</li><li>LXC fleet</li></ol></dd></div>
+                <div><dt>Problem</dt><dd>Hand edits over SSH drift away from the documentation and leave no clean way back.</dd></div>
+                <div><dt>Decision</dt><dd>Host configuration, proxy routes and DNS records live in Forgejo. Forgejo Actions runs Ansible to apply them across the LXC fleet, so every change has a commit, a pipeline run and a revert path.</dd></div>
+                <div><dt>Check</dt><dd>Repeat the run against a healthy host: an idempotent playbook should report no changes.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/agents</p>
-                <h4>AI agents go through the same gate as everyone else.</h4>
-              </div>
+              <h4>AI agents go through the same gate as everyone else.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>Coding agents and dependency bots can propose changes faster than anyone can watch them, and a green status is easy to over-trust.</dd></div>
-                <div><dt>decision</dt><dd>Agents and Renovate open pull requests in Forgejo like any other contributor. A change merges only at the exact commit that passed the required checks and an independent review, never by force. A change that would restart the agents&rsquo; own host stops at a ready pull request for me to merge.</dd></div>
-                <div><dt>check</dt><dd>After a merge, the deploy run and the installed version are read back on the host. A passing pipeline alone does not count as deployed.</dd></div>
+                <div><dt>Problem</dt><dd>Coding agents and dependency bots can propose changes faster than anyone can watch them, and a green status is easy to over-trust.</dd></div>
+                <div><dt>Decision</dt><dd>I work through one coordinating agent in T3 Code. It hands each task to its own Pi agent thread with a written brief, limits and a required report back, and all of them share long-term memory in OpenViking. Each new Renovate dependency pull request automatically gets its own review thread. A change merges only at the exact commit that passed the required checks and an independent review, never by force, and anything that would restart the agents&rsquo; own host stops at a ready pull request for me.</dd></div>
+                <div><dt>Check</dt><dd>After a merge, the deploy run and the installed version are read back on the host. A passing pipeline alone does not count as deployed.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/onboarding</p>
-                <h4>New containers enroll themselves into monitoring.</h4>
-              </div>
+              <h4>Operating-system patches arrive as a daily pull request.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>New containers are easy to miss, and a fresh guest has no managed SSH access yet.</dd></div>
-                <div><dt>decision</dt><dd>After stable discovery, Ansible connects over pinned Proxmox SSH and runs inside the guest. It installs a Wazuh agent matched to the manager and a node exporter, then writes only its own scrape targets, atomically.</dd></div>
-                <div><dt>check</dt><dd>A guest counts as enrolled only when Wazuh shows the agent active, Prometheus has a healthy target with fresh samples, and a repeat run changes nothing.</dd></div>
+                <div><dt>Problem</dt><dd>Unattended upgrades change hosts with no review, and once something breaks there is no record of which version did it.</dd></div>
+                <div><dt>Decision</dt><dd>Every day a bot proposes a lockfile with the exact pending package versions for every running container. Merging it applies the lock one container at a time, each right after its own Proxmox snapshot. GPU driver packages stay pinned to the host, and services that cannot be restarted safely are reported instead of restarted.</dd></div>
+                <div><dt>Check</dt><dd>The apply step refuses to run unless the lock comes from the latest merged batch, and it skips any container whose packages changed since the plan. Installed versions are read back afterwards.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/identity</p>
-                <h4>One sign-in for people, short-lived certificates for automation.</h4>
-              </div>
+              <h4>New containers enroll themselves into monitoring.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>A password per app for people and long-lived keys for automation both widen the blast radius.</dd></div>
-                <div><dt>decision</dt><dd>Casdoor SSO through native OIDC where an app supports it, Caddy forward-auth where it does not. Managed hosts accept short-lived OpenBao SSH certificates against pinned host keys.</dd></div>
-                <div><dt>check</dt><dd>Certificate SSH and sudo are tested on a host before it counts as managed; each app&rsquo;s sign-in and sign-out path is tested through Casdoor.</dd></div>
+                <div><dt>Problem</dt><dd>New containers are easy to miss, and a fresh guest has no managed SSH access yet.</dd></div>
+                <div><dt>Decision</dt><dd>After stable discovery, Ansible connects over pinned Proxmox SSH and runs inside the guest. It installs a Wazuh agent matched to the manager and a node exporter, then writes only its own scrape targets, atomically.</dd></div>
+                <div><dt>Check</dt><dd>A guest counts as enrolled only when Wazuh shows the agent active, Prometheus has a healthy target with fresh samples, and a repeat run changes nothing.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/edge</p>
-                <h4>A real edge router, scoped remote access, HTTPS on the inside.</h4>
-              </div>
+              <h4>One sign-in for people, short-lived certificates for automation.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>Remote access and internal services should reach the right people without exposing everything else.</dd></div>
-                <div><dt>decision</dt><dd>A MikroTik router is the production edge, with CrowdSec and WireGuard restricted to approved peers. Blocky answers internal DNS; Caddy serves internal services over HTTPS.</dd></div>
-                <div><dt>check</dt><dd>Source restrictions are re-checked after edge changes, and Blackbox probes internal names over HTTPS, including certificate expiry.</dd></div>
+                <div><dt>Problem</dt><dd>A password per app for people and long-lived keys for automation both widen the blast radius.</dd></div>
+                <div><dt>Decision</dt><dd>Authelia provides single sign-on, through native OIDC where an app supports it and Caddy forward-auth where it does not. Managed hosts accept short-lived OpenBao SSH certificates against pinned host keys instead of stored keys.</dd></div>
+                <div><dt>Check</dt><dd>Certificate SSH and sudo are tested on a host before it counts as managed.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/observability</p>
-                <h4>Signals before guesses.</h4>
-              </div>
+              <h4>A real edge router, and network zones that cannot see each other.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>Without signals, every incident starts with guessing which layer failed.</dd></div>
-                <div><dt>decision</dt><dd>Wazuh for security events and agent health, Prometheus and node exporters for host metrics, Blackbox for endpoint probes, Grafana to investigate in one place.</dd></div>
-                <div><dt>check</dt><dd>Probes expect a real response from the endpoint, not just an open port, and a failed collection counts as down rather than silent.</dd></div>
+                <div><dt>Problem</dt><dd>On a flat network, one compromised service can reach every other one.</dd></div>
+                <div><dt>Decision</dt><dd>A MikroTik router is the edge, with CrowdSec and WireGuard restricted to approved peers. Guests sit in separate management, core, edge and automation VLANs with default-deny between zones, and each allowed path is a specific router rule added by a reviewed change. A few core services stay on the trusted network by deliberate choice. Blocky answers internal DNS and Caddy serves internal services over HTTPS.</dd></div>
+                <div><dt>Check</dt><dd>A canary check confirms the forbidden paths stay closed, and Blackbox probes internal names over HTTPS, including certificate expiry.</dd></div>
               </dl>
             </li>
             <li class="record">
-              <div class="record-head">
-                <p class="record-path">lab/knowledge</p>
-                <h4>Documentation and AI tooling that remember the estate.</h4>
-              </div>
+              <h4>Signals before guesses.</h4>
               <dl class="decision">
-                <div><dt>problem</dt><dd>Context about the estate gets lost between sessions, people and AI agents.</dd></div>
-                <div><dt>decision</dt><dd>Homelable holds inventory and runbooks. OpenViking gives agents memory across sessions, local models run on Ollama, and MCP connects agents to lab tooling, with changes still routed through Git.</dd></div>
-                <div><dt>check</dt><dd>Notes are a starting point, not evidence: live state is read back before a change, and inventory and runbooks are updated after it.</dd></div>
+                <div><dt>Problem</dt><dd>Without signals, every incident starts with guessing which layer failed.</dd></div>
+                <div><dt>Decision</dt><dd>Wazuh for security events and agent health, Prometheus and node exporters for host metrics, Blackbox for endpoint probes, Grafana to investigate in one place. Grafana alerts post to a webhook that wakes the coordinating agent, which re-checks the live state before it reports.</dd></div>
+                <div><dt>Check</dt><dd>Probes expect a real response from the endpoint, not just an open port, and a failed collection counts as down rather than silent. Alert delivery to the agent was proven end to end with a test alert.</dd></div>
+              </dl>
+            </li>
+            <li class="record">
+              <h4>Documentation and AI tooling that remember the estate.</h4>
+              <dl class="decision">
+                <div><dt>Problem</dt><dd>Context about the estate gets lost between sessions, people and AI agents.</dd></div>
+                <div><dt>Decision</dt><dd>Homelable holds inventory and runbooks. OpenViking gives agents memory across sessions. Local models run on Ollama on a passed-through GPU, with the NVIDIA driver pinned to the host&rsquo;s version by a workflow. MCP connects agents to lab tooling, and changes still go through Git.</dd></div>
+                <div><dt>Check</dt><dd>Notes are a starting point, not evidence: live state is read back before a change, and inventory and runbooks are updated after it.</dd></div>
               </dl>
             </li>
           </ol>
@@ -339,10 +325,10 @@ if (
                 <span class="case-result">95% fewer configuration errors</span>
               </summary>
               <dl class="case-notes">
-                <div><dt>problem</dt><dd>Manual router edits varied by technician and site.</dd></div>
-                <div><dt>built</dt><dd>Reusable RouterOS scripts for VPN, firewall and guest VLAN settings, with validation, backups and rollback.</dd></div>
-                <div><dt>outcome</dt><dd>Common deployment work dropped from hours to seconds.</dd></div>
-                <div><dt>tools</dt><dd>MikroTik RouterOS, IPsec, L2TP, VLANs, FTP backup</dd></div>
+                <div><dt>Problem</dt><dd>Manual router edits varied by technician and site.</dd></div>
+                <div><dt>Built</dt><dd>Reusable RouterOS scripts for VPN, firewall and guest VLAN settings, with validation, backups and rollback.</dd></div>
+                <div><dt>Outcome</dt><dd>Common deployment work dropped from hours to seconds.</dd></div>
+                <div><dt>Tools</dt><dd>MikroTik RouterOS, IPsec, L2TP, VLANs, FTP backup</dd></div>
               </dl>
             </details>
 
@@ -352,10 +338,10 @@ if (
                 <span class="case-result">hours → minutes per installation</span>
               </summary>
               <dl class="case-notes">
-                <div><dt>problem</dt><dd>Manual builds took too long and left machines configured differently.</dd></div>
-                <div><dt>built</dt><dd>PXE imaging with driver injection, bundled software and a final QA checklist.</dd></div>
-                <div><dt>outcome</dt><dd>Every workstation left the bench with the same verified baseline.</dd></div>
-                <div><dt>tools</dt><dd>PXE, Windows, driver injection, software packaging</dd></div>
+                <div><dt>Problem</dt><dd>Manual builds took too long and left machines configured differently.</dd></div>
+                <div><dt>Built</dt><dd>PXE imaging with driver injection, bundled software and a final QA checklist.</dd></div>
+                <div><dt>Outcome</dt><dd>Every workstation left the bench with the same verified baseline.</dd></div>
+                <div><dt>Tools</dt><dd>PXE, Windows, driver injection, software packaging</dd></div>
               </dl>
             </details>
 
@@ -365,10 +351,10 @@ if (
                 <span class="case-result">25+ people working on day one</span>
               </summary>
               <dl class="case-notes">
-                <div><dt>problem</dt><dd>A new office needed its entire technology setup before opening.</dd></div>
-                <div><dt>built</dt><dd>Edge routing, switching, UniFi wireless, structured cabling, the rack and VoIP.</dd></div>
-                <div><dt>outcome</dt><dd>More than 25 people working on day one, without a post-opening outage.</dd></div>
-                <div><dt>tools</dt><dd>MikroTik, UniFi, structured cabling, switching, VoIP</dd></div>
+                <div><dt>Problem</dt><dd>A new office needed its entire technology setup before opening.</dd></div>
+                <div><dt>Built</dt><dd>Edge routing, switching, UniFi wireless, structured cabling, the rack and VoIP.</dd></div>
+                <div><dt>Outcome</dt><dd>More than 25 people working on day one, without a post-opening outage.</dd></div>
+                <div><dt>Tools</dt><dd>MikroTik, UniFi, structured cabling, switching, VoIP</dd></div>
               </dl>
             </details>
           </div>
@@ -433,12 +419,12 @@ if (
           <p class="lede">Tools attached to actual work.</p>
           <p class="section-note">An operating inventory from professional roles, not a keyword cloud. Lab tooling is listed with the lab above.</p>
           <dl class="tool-index">
-            <div><dt>support operations</dt><dd>ConnectWise Automate, ConnectWise Manage, Autotask, ScreenConnect, IT Glue, IT Boost, Pax8</dd></div>
-            <div><dt>identity + security</dt><dd>Active Directory, Entra ID, Group Policy, BitLocker, CrowdStrike, ThreatLocker, Sophos, Duo, Defender, MFA</dd></div>
-            <div><dt>microsoft 365</dt><dd>Exchange Admin, Teams Admin, Teams Rooms, SharePoint, OneDrive, Intune, Power Automate, tenant migrations</dd></div>
-            <div><dt>systems</dt><dd>Windows Server, SCCM, Lansweeper, Hyper-V, XenCenter, Proxmox, Azure, DHCP, DNS</dd></div>
-            <div><dt>network + field</dt><dd>MikroTik RouterOS, UniFi, FortiGate, WatchGuard, VLANs, firewall policy, fiber termination, structured cabling</dd></div>
-            <div><dt>recovery + endpoints</dt><dd>Veeam, Axcient, backup validation, DR testing, ManageEngine, SOTI MobiControl, macOS, iOS, printers, MFPs</dd></div>
+            <div><dt>Support operations</dt><dd>ConnectWise Automate, ConnectWise Manage, Autotask, ScreenConnect, IT Glue, IT Boost, Pax8</dd></div>
+            <div><dt>Identity and security</dt><dd>Active Directory, Entra ID, Group Policy, BitLocker, CrowdStrike, ThreatLocker, Sophos, Duo, Defender, MFA</dd></div>
+            <div><dt>Microsoft 365</dt><dd>Exchange Admin, Teams Admin, Teams Rooms, SharePoint, OneDrive, Intune, Power Automate, tenant migrations</dd></div>
+            <div><dt>Systems</dt><dd>Windows Server, SCCM, Lansweeper, Hyper-V, XenCenter, Proxmox, Azure, DHCP, DNS</dd></div>
+            <div><dt>Network and field</dt><dd>MikroTik RouterOS, UniFi, FortiGate, WatchGuard, VLANs, firewall policy, fiber termination, structured cabling</dd></div>
+            <div><dt>Recovery and endpoints</dt><dd>Veeam, Axcient, backup validation, DR testing, ManageEngine, SOTI MobiControl, macOS, iOS, printers, MFPs</dd></div>
           </dl>
         </div>
       </section>
@@ -479,10 +465,10 @@ if (
             <p class="section-note">Based in Los Angeles. The form is the fastest route; GitHub and the PDF resume work too.</p>
             <form class="contact-form" id="contact-form" action="https://formspree.io/f/mdaqdreg" method="post">
               <div class="form-row">
-                <label><span>name</span><input type="text" name="name" autocomplete="name" maxlength="100" required></label>
-                <label><span>email</span><input type="email" name="email" autocomplete="email" maxlength="200" required></label>
+                <label><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="100" required></label>
+                <label><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="200" required></label>
               </div>
-              <label><span>message</span><textarea name="message" rows="5" maxlength="3000" required></textarea></label>
+              <label><span>Message</span><textarea name="message" rows="5" maxlength="3000" required></textarea></label>
               <input class="hp-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
               <div class="form-foot">
                 <button class="button primary" type="submit">Send message</button>
@@ -515,6 +501,6 @@ if (
       <a class="to-top" href="#top">back to top</a>
     </footer>
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script defer src="script.js?v=12"></script>
+    <script defer src="script.js?v=13"></script>
   </body>
 </html>

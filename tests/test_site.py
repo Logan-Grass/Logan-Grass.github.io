@@ -119,11 +119,28 @@ class SiteTests(unittest.TestCase):
         self.assertIn('href="/"', page)
         self.assertNotRegex(page, r"\binnerHTML\b|\beval\s*\(")
 
-    def test_jetbrains_mono_is_the_only_web_font(self):
+    def test_fonts_are_self_hosted_and_readable(self):
+        # Owner decision 2026-11-26: a readable sans for body text, JetBrains Mono only
+        # for the terminal, navigation, section names and code. No third-party font CDN.
         css = (ROOT / "styles.css").read_text()
-        self.assertNotRegex(self.source + css, r"(?i)space[ +]grotesk")
-        self.assertIn("family=JetBrains+Mono:", self.source)
-        self.assertRegex(css, r"--sans:\s*var\(--mono\)")
+        pages = self.source + (ROOT / "404.html").read_text()
+        self.assertNotRegex(pages + css, r"fonts\.(googleapis|gstatic)\.com")
+        self.assertNotRegex(pages + css, r"(?i)space[ +]grotesk")
+        self.assertRegex(css, r'--sans:\s*"IBM Plex Sans"')
+        self.assertRegex(css, r'--mono:\s*"JetBrains Mono"')
+        for name in re.findall(r'url\("(assets/fonts/[^"]+\.woff2)"\)', css):
+            with self.subTest(font=name):
+                self.assertTrue((ROOT / name).is_file())
+        for licence in ("OFL-IBM-Plex-Sans.txt", "OFL-JetBrains-Mono.txt"):
+            self.assertTrue((ROOT / "assets/fonts" / licence).is_file())
+        body = re.search(r"body\s*\{([^}]+)\}", css).group(1)
+        self.assertRegex(body, r"font-size:\s*1\.0625rem")
+
+    def test_identity_provider_is_current(self):
+        # Casdoor was retired in November 2026; Authelia is the identity provider.
+        script = (ROOT / "script.js").read_text()
+        self.assertNotIn("Casdoor", self.source + script)
+        self.assertIn("Authelia", self.source)
 
     def test_full_width_header_does_not_use_scrollbar_inclusive_vw(self):
         css = (ROOT / "styles.css").read_text()

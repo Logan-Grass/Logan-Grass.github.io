@@ -116,9 +116,11 @@ const TERMINAL_COMMANDS = Object.freeze({
   resume: () => [{ node: resumeLink() }, { text: "PDF download, current revision.", kind: "dim" }],
   lab: () => [
     "Proxmox VE + Debian/Ubuntu LXC, changed through Forgejo → Actions → Ansible",
-    "access: Casdoor SSO for people, short-lived OpenBao SSH certificates for automation",
-    "signals: Wazuh, Prometheus, Blackbox, Grafana",
-    "agents: AI coding agents and Renovate merge only at the exact commit that passed checks and review",
+    "access: Authelia SSO for people, short-lived OpenBao SSH certificates for automation",
+    "network: management, core, edge and automation VLANs, default-deny between zones",
+    "patching: daily pull request with exact package versions, snapshot before each container",
+    "signals: Wazuh, Prometheus, Blackbox, Grafana; alerts wake the coordinating agent",
+    "agents: T3 Code + Pi threads and Renovate merge only at the exact checked, reviewed commit",
     { text: "snapshot from October–November 2026 runbooks, not live telemetry", kind: "dim" },
     { text: "→ ~/lab", kind: "ok", target: "#lab" }
   ],
