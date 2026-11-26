@@ -1,27 +1,13 @@
 /* Logan Grass — personal IT workbench.
-   Catppuccin Mocha with restrained lavender. IBM Plex Sans for reading;
-   JetBrains Mono for the terminal, navigation, section names and code.
-   Both fonts are self-hosted (SIL OFL 1.1, licences in assets/fonts/).
+   Catppuccin Mocha with restrained lavender. JetBrains Mono for all text,
+   self-hosted (SIL OFL 1.1, licence in assets/fonts/). Readability comes from
+   size, line-height, measure and contrast, not from a second typeface.
 
-   Each section's name (~/lab) is its heading, in mono, directly above the content,
+   Each section's name (~/lab) sits directly above the content,
    which uses the full page width; prose is capped at a readable measure. Rules and
    spacing do the grouping; boxes are kept for the two real instruments (terminal
    and map). */
 
-@font-face {
-  font-family: "IBM Plex Sans";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/fonts/ibm-plex-sans-latin-400-normal.woff2?v=2") format("woff2");
-}
-@font-face {
-  font-family: "IBM Plex Sans";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/fonts/ibm-plex-sans-latin-600-normal.woff2?v=2") format("woff2");
-}
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
@@ -76,13 +62,13 @@
 
   --max: 1200px;
   --gutter: 48px;
-  --measure: 58ch; /* about 72 characters of IBM Plex Sans; ch is the wide "0" */
+  --measure: 72ch;
   --radius: 8px;
   --radius-sm: 5px;
   --fast: 140ms cubic-bezier(0.22, 1, 0.36, 1);
 
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sans: var(--mono);
 }
 
 /* ---------- Foundation ---------- */
@@ -111,7 +97,7 @@ body {
   color: var(--text);
   font-family: var(--sans);
   font-size: 1.0625rem;
-  line-height: 1.6;
+  line-height: 1.7;
   overflow-wrap: break-word;
   caret-color: var(--lavender);
 }
@@ -124,14 +110,6 @@ h1, h2, h3, h4, p, figure, blockquote { margin: 0; }
 h1, h2, h3, h4 { color: var(--bright); font-weight: 600; letter-spacing: -0.005em; text-wrap: balance; }
 p, dd, li { text-wrap: pretty; }
 code, kbd, pre { font-family: var(--mono); }
-
-/* Mono is for the instruments and the shell grammar, not for reading. */
-.site-header,
-.panel,
-.section > h2,
-.pipe,
-.evidence-source,
-.commit-link { font-family: var(--mono); }
 time { font-variant-numeric: tabular-nums; }
 
 :focus-visible {
@@ -164,7 +142,7 @@ time { font-variant-numeric: tabular-nums; }
   border-radius: var(--radius-sm);
   background: var(--lavender);
   color: var(--crust);
-  font-weight: 700;
+  font-weight: 600;
 }
 .skip-link:focus { transform: none; }
 
@@ -651,7 +629,7 @@ h1 {
 .decision { display: grid; gap: var(--s2); margin: 0; }
 .decision > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--s3); }
 .decision dt { color: var(--lavender); font-size: 0.94rem; font-weight: 600; line-height: 1.7rem; }
-.decision dd { max-width: var(--measure); margin: 0; color: var(--subtext-1); font-size: 1.0625rem; line-height: 1.6; }
+.decision dd { max-width: var(--measure); margin: 0; color: var(--subtext-1); font-size: 1.0625rem; line-height: 1.7; }
 .decision > div:nth-child(3) dt { color: var(--green); }
 
 .pipe { display: flex; flex-wrap: wrap; gap: 4px 0; margin: var(--s3) 0 0; padding: 0; list-style: none; font-size: 0.88rem; }
@@ -890,7 +868,6 @@ h1 {
 
 /* ---------- 404 ---------- */
 
-.not-found .t-line { font-family: var(--mono); }
 .not-found {
   width: min(calc(100% - var(--gutter)), 760px);
   margin: 0 auto;

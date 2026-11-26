@@ -97,10 +97,9 @@ necessary excerpt. Do not replace genuine evidence with staged dashboards or inv
   location permission is required. Retain attribution, a usable fallback link, and sensible
   behaviour if the CDN or tile network is unavailable. Follow the OpenStreetMap tile usage
   policy: https://operations.osmfoundation.org/policies/tiles/ (no bulk downloads/prefetch).
-- Fonts are self-hosted in `assets/fonts/` under the SIL Open Font License (licence files
-  beside them): IBM Plex Sans for reading text, JetBrains Mono for the terminal, navigation,
-  section names and code. The owner chose a readable sans for body text on 2026-11-26; do not
-  return to mono-only body text or load fonts from a third-party CDN.
+- JetBrains Mono is the only typeface, for all text (owner preference, confirmed
+  2026-11-26). It is self-hosted in `assets/fonts/` under the SIL Open Font License (licence
+  beside it); do not add a second typeface or load fonts from a third-party CDN.
 - `assets/og-card.svg` is the editable source for the 1200×630 PNG social-sharing card.
 
 ## Preview and checks

@@ -119,22 +119,28 @@ class SiteTests(unittest.TestCase):
         self.assertIn('href="/"', page)
         self.assertNotRegex(page, r"\binnerHTML\b|\beval\s*\(")
 
-    def test_fonts_are_self_hosted_and_readable(self):
-        # Owner decision 2026-11-26: a readable sans for body text, JetBrains Mono only
-        # for the terminal, navigation, section names and code. No third-party font CDN.
+    def test_jetbrains_mono_is_the_only_font(self):
+        # Owner preference (confirmed 2026-11-26): JetBrains Mono for all text, self-hosted,
+        # no second typeface and no third-party font CDN. Readability comes from size,
+        # line-height and contrast.
         css = (ROOT / "styles.css").read_text()
         pages = self.source + (ROOT / "404.html").read_text()
+        og = (ROOT / "assets/og-card.svg").read_text()
         self.assertNotRegex(pages + css, r"fonts\.(googleapis|gstatic)\.com")
-        self.assertNotRegex(pages + css, r"(?i)space[ +]grotesk")
-        self.assertRegex(css, r'--sans:\s*"IBM Plex Sans"')
+        self.assertNotRegex(pages + css + og, r"(?i)space[ +]grotesk|ibm plex|\binter\b|roboto|system-ui|sans-serif")
+        self.assertEqual(set(re.findall(r'font-family:\s*"([^"]+)"', css)), {"JetBrains Mono"})
         self.assertRegex(css, r'--mono:\s*"JetBrains Mono"')
+        self.assertRegex(css, r"--sans:\s*var\(--mono\)")
+        self.assertEqual(set(re.findall(r'font-family="([^",]+)', og)), {"JetBrains Mono"})
         fonts = re.findall(r'url\("(assets/fonts/[^"?]+\.woff2)(?:\?[^"]*)?"\)', css)
-        self.assertEqual(len(fonts), 4)
+        self.assertEqual(len(fonts), 2)
         for name in fonts:
             with self.subTest(font=name):
+                self.assertTrue(name.startswith("assets/fonts/jetbrains-mono-"))
                 self.assertTrue((ROOT / name).is_file())
-        for licence in ("OFL-IBM-Plex-Sans.txt", "OFL-JetBrains-Mono.txt"):
-            self.assertTrue((ROOT / "assets/fonts" / licence).is_file())
+        self.assertEqual(sorted(p.name for p in (ROOT / "assets/fonts").iterdir()),
+                         ["OFL-JetBrains-Mono.txt", "jetbrains-mono-latin-400-normal.woff2",
+                          "jetbrains-mono-latin-600-normal.woff2"])
         body = re.search(r"body\s*\{([^}]+)\}", css).group(1)
         self.assertRegex(body, r"font-size:\s*1\.0625rem")
 
