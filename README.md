@@ -15,7 +15,7 @@ Core content, project details, downloads, and contact submission remain usable w
 | Local-only terminal, interactive map, progressive enhancements, and contact feedback | `script.js` |
 | Resume, certificates, social preview, and locally stored icons | `assets/` |
 | Public-safe source excerpts and provenance | `assets/evidence/` |
-| Source-evidence presentation | `assets/evidence.css` |
+| Not-found page | `404.html` |
 | Site integrity and public-content checks | `tests/test_site.py` |
 
 ### Design direction
@@ -26,15 +26,24 @@ intentional character, not clutter to replace with a generic editorial portfolio
 italic-serif marketing headlines and anonymous profile-card layouts. Improve hierarchy,
 spacing, and navigation without removing personality.
 
+The November 2026 pass applied the anti-template guidance from
+[Impeccable](https://github.com/pbakaus/impeccable): sections read like a man page, with the
+section name (`~/lab`) as the heading in a left margin and one readable column beside it.
+Rules and spacing group content; the terminal and map are the only boxed panels. Do not
+reintroduce eyebrow labels or section numbers above headings, grids of identical cards,
+fake window-control dots, decorative glass blur, one-sided accent bars, or a scroll-reveal
+animation on every section. `tests/test_site.py` guards the mechanical parts of this.
+
 Lead with a clear professional introduction, then make the homelab a substantial engineering
 showcase rather than an afterthought below the skills list. Professional client work and
 personal projects are distinct. Use readable body text, progressive disclosure, accessible
 controls, and layouts that work from small phones to wide desktops. Technical UI must be
 functional and honest: no simulated live fleet health or fake telemetry.
 
-The redesign's homelab copy describes documented work from October 2026, **not live telemetry**.
+The redesign's homelab copy describes documented work from October and November 2026, **not live telemetry**.
 It covers infrastructure as code, automated guest monitoring, certificate-based access,
-federated identity, observability, and persistent-memory AI workflows. It deliberately avoids
+federated identity, observability, persistent-memory AI workflows, and the review gate that AI
+coding agents and Renovate go through before a change merges. It deliberately avoids
 volatile fleet counts and does not imply that off-host backups, disaster-recovery exercises,
 or end-to-end alert delivery have been established.
 
@@ -51,7 +60,8 @@ its content separately.
 
 The backdrop is a static Mocha gradient with restrained lavender/blue illumination, not a
 repeating grid. Essential content stays visible without waiting for scroll-reveal callbacks.
-Ticket feedback uses an explicit responsive grid rather than CSS column fragmentation.
+Ticket feedback shows three featured responses and a ruled list of the rest; all thirteen are
+visible without JavaScript, with no filter or collapse step.
 Grid children may shrink, and desktop navigation wraps when enlarged text needs more room.
 The sticky header's full-width background is its own 100%-width box, not a `100vw`
 pseudo-element: `100vw` includes desktop scrollbars and can make the page scroll sideways.

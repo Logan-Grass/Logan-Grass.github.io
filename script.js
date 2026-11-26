@@ -118,13 +118,14 @@ const TERMINAL_COMMANDS = Object.freeze({
     "Proxmox VE + Debian/Ubuntu LXC, changed through Forgejo → Actions → Ansible",
     "access: Casdoor SSO for people, short-lived OpenBao SSH certificates for automation",
     "signals: Wazuh, Prometheus, Blackbox, Grafana",
-    { text: "snapshot from October 2026 runbooks, not live telemetry", kind: "dim" },
+    "agents: AI coding agents and Renovate merge only at the exact commit that passed checks and review",
+    { text: "snapshot from October–November 2026 runbooks, not live telemetry", kind: "dim" },
     { text: "→ ~/lab", kind: "ok", target: "#lab" }
   ],
   work: () => [
-    "LG-OPS-01  router deployments        95% fewer configuration errors",
-    "LG-OPS-02  PXE workstation builds    hours → minutes",
-    "LG-OPS-03  office buildout           25+ people ready on day one",
+    "router deployments        95% fewer configuration errors",
+    "PXE workstation builds    hours → minutes per installation",
+    "office buildout           25+ people working on day one",
     { text: "→ ~/work", kind: "ok", target: "#work" }
   ],
   history: () => [
@@ -363,56 +364,6 @@ function initMap() {
   });
 }
 
-/* ---------- Lab architecture tabs ---------- */
-
-/* WAI-ARIA tabs with automatic activation: arrow keys move focus and selection;
-   Home/End jump to the ends. Without JS, all three paths render stacked and the
-   tablist stays hidden. */
-function initArchitectureTabs() {
-  const figure = select(".architecture");
-  const tablist = select('[role="tablist"]', figure || document);
-  if (!figure || !tablist) return;
-
-  const tabs = selectAll('[role="tab"]', tablist);
-  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls"))).filter(Boolean);
-  if (tabs.length !== panels.length || !tabs.length) return;
-
-  const activate = (index, { focus = false } = {}) => {
-    tabs.forEach((tab, i) => {
-      const selected = i === index;
-      tab.setAttribute("aria-selected", String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-      panels[i].hidden = !selected;
-    });
-    if (focus) tabs[index].focus();
-  };
-
-  tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => activate(index));
-    tab.addEventListener("keydown", (event) => {
-      const last = tabs.length - 1;
-      const keyTargets = {
-        ArrowRight: index === last ? 0 : index + 1,
-        ArrowLeft: index === 0 ? last : index - 1,
-        Home: 0,
-        End: last
-      };
-      if (!(event.key in keyTargets)) return;
-      event.preventDefault();
-      activate(keyTargets[event.key], { focus: true });
-    });
-  });
-
-  panels.forEach((panel, i) => {
-    panel.setAttribute("role", "tabpanel");
-    panel.setAttribute("aria-labelledby", tabs[i].id);
-    panel.tabIndex = 0;
-  });
-  figure.classList.add("has-tabs");
-  tablist.hidden = false;
-  activate(0);
-}
-
 /* Print and in-page links should reach collapsed case studies. */
 function initCaseStudies() {
   const cases = selectAll("details.case");
@@ -443,103 +394,7 @@ function initCaseStudies() {
   openFromHash();
 }
 
-/* ---------- Ticket feedback filter + show more ---------- */
-
-/* Without JS every response is visible. With JS, the first FEEDBACK_LIMIT matching
-   responses show by default and a native button reveals the rest. Filters work across
-   all responses; changing the filter returns to the collapsed view. Print CSS shows
-   every response regardless of filter or collapse state. */
-const FEEDBACK_LIMIT = 6;
-
-function initFeedback() {
-  const tools = select(".feedback-tools");
-  const items = selectAll(".ticket[data-feedback-category]");
-  const buttons = selectAll("[data-feedback-filter]");
-  const count = select("#feedback-count");
-  const more = select(".feedback-more");
-  const toggle = select(".feedback-toggle");
-  const toggleLabel = select(".feedback-toggle-label");
-  if (!tools || !items.length || !buttons.length || !count) return;
-
-  let filter = "all";
-  let expanded = false;
-
-  const render = () => {
-    const matching = items.filter((item) => filter === "all" || item.dataset.feedbackCategory === filter);
-    const canCollapse = matching.length > FEEDBACK_LIMIT;
-    const capped = canCollapse && !expanded;
-
-    items.forEach((item) => { item.hidden = true; });
-    matching.forEach((item, index) => { item.hidden = capped && index >= FEEDBACK_LIMIT; });
-
-    const visible = capped ? FEEDBACK_LIMIT : matching.length;
-    count.textContent = filter === "all"
-      ? `${visible} of ${items.length} shown`
-      : `${visible} of ${items.length} shown, filtered to ${filter}`;
-
-    buttons.forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.feedbackFilter === filter));
-    });
-
-    if (more && toggle && toggleLabel) {
-      more.hidden = !canCollapse;
-      toggle.setAttribute("aria-expanded", String(canCollapse && expanded));
-      toggleLabel.textContent = expanded ? "Show fewer" : `Show all ${matching.length}`;
-    }
-  };
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      filter = button.dataset.feedbackFilter;
-      expanded = false;
-      render();
-    });
-  });
-
-  toggle?.addEventListener("click", () => {
-    expanded = !expanded;
-    render();
-    // Focus stays on the toggle. After collapsing, the button moves up with the shorter
-    // grid; bring it back into view with the smallest possible scroll.
-    if (!expanded) {
-      const rect = toggle.getBoundingClientRect();
-      const headerBottom = select(".site-header")?.getBoundingClientRect().bottom ?? 0;
-      if (rect.top < headerBottom || rect.bottom > window.innerHeight) {
-        toggle.scrollIntoView({ behavior: "auto", block: "nearest" });
-      }
-    }
-  });
-
-  tools.hidden = false;
-  render();
-}
-
 /* ---------- Page chrome ---------- */
-
-function initReveal() {
-  const nodes = selectAll("[data-reveal]");
-  if (!nodes.length) return;
-
-  const revealImmediately = prefersReducedMotion
-    || !("IntersectionObserver" in window)
-    || window.matchMedia("(max-width: 760px)").matches;
-
-  if (revealImmediately) {
-    nodes.forEach((node) => node.classList.add("revealed"));
-    return;
-  }
-
-  document.documentElement.classList.add("js");
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("revealed");
-      observer.unobserve(entry.target);
-    });
-  }, { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
-
-  nodes.forEach((node) => observer.observe(node));
-}
 
 function initHeader() {
   const header = select(".site-header");
@@ -629,13 +484,10 @@ function initSectionNavigation() {
 function initPage() {
   const steps = [
     setCurrentYear,
-    initReveal,
     initHeader,
     initMap,
     initTerminal,
-    initArchitectureTabs,
     initCaseStudies,
-    initFeedback,
     initContactForm,
     initClock,
     initSectionNavigation

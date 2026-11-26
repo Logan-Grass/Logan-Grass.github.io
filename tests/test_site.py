@@ -96,12 +96,28 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("getCurrentPosition", script)
 
     def test_essential_content_is_not_hidden_before_scroll(self):
+        # Content renders immediately; there is no scroll-reveal step to wait for.
         css = (ROOT / "styles.css").read_text()
-        rules = re.findall(r"\.js\s+\[data-reveal\]\s*\{([^}]+)\}", css)
-        self.assertTrue(rules, "Essential content needs an explicit visible default")
-        for rule in rules:
-            self.assertNotRegex(rule, r"opacity\s*:\s*0\s*[;}]?")
-            self.assertNotRegex(rule, r"visibility\s*:\s*hidden")
+        script = (ROOT / "script.js").read_text()
+        self.assertNotIn("data-reveal", self.source)
+        self.assertNotIn("data-reveal", css)
+        self.assertNotIn("initReveal", script)
+
+    def test_avoids_generic_template_patterns(self):
+        # Regressions to the stock AI-portfolio scaffold the redesign removed:
+        # eyebrow labels and section numbers above headings, fake window-control
+        # dots, decorative glass blur, and one-sided accent bars.
+        css = (ROOT / "styles.css").read_text()
+        for token in ('class="eyebrow', 'class="kicker', "panel-dots", "eyebrow-n"):
+            with self.subTest(token=token):
+                self.assertNotIn(token, self.source)
+        self.assertNotRegex(css, r"backdrop-filter\s*:\s*blur")
+        self.assertNotRegex(css, r"border-left\s*:\s*[2-9]px\s+solid")
+
+    def test_not_found_page(self):
+        page = (ROOT / "404.html").read_text()
+        self.assertIn('href="/"', page)
+        self.assertNotRegex(page, r"\binnerHTML\b|\beval\s*\(")
 
     def test_jetbrains_mono_is_the_only_web_font(self):
         css = (ROOT / "styles.css").read_text()
