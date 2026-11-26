@@ -3,37 +3,38 @@
    JetBrains Mono for the terminal, navigation, section names and code.
    Both fonts are self-hosted (SIL OFL 1.1, licences in assets/fonts/).
 
-   Layout reads like a man page: each section's name sits in a left margin,
-   the content runs in one readable column beside it. Rules and spacing do the
-   grouping; boxes are kept for the two real instruments (terminal and map). */
+   Each section's name (~/lab) is its heading, in mono, directly above the content,
+   which uses the full page width; prose is capped at a readable measure. Rules and
+   spacing do the grouping; boxes are kept for the two real instruments (terminal
+   and map). */
 
 @font-face {
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("assets/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+  src: url("assets/fonts/ibm-plex-sans-latin-400-normal.woff2?v=2") format("woff2");
 }
 @font-face {
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("assets/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+  src: url("assets/fonts/ibm-plex-sans-latin-600-normal.woff2?v=2") format("woff2");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+  src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2?v=2") format("woff2");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("assets/fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2");
+  src: url("assets/fonts/jetbrains-mono-latin-600-normal.woff2?v=2") format("woff2");
 }
 
 :root {
@@ -75,8 +76,7 @@
 
   --max: 1200px;
   --gutter: 48px;
-  --margin-col: 11rem;
-  --measure: 56ch; /* about 70 characters of IBM Plex Sans; ch is the wide "0" */
+  --measure: 58ch; /* about 72 characters of IBM Plex Sans; ch is the wide "0" */
   --radius: 8px;
   --radius-sm: 5px;
   --fast: 140ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -544,21 +544,15 @@ h1 {
   box-shadow: 0 0 0 5px rgba(180, 190, 254, 0.25);
 }
 
-/* ---------- Sections: name in the margin, content beside it ---------- */
+/* ---------- Sections: name, then content across the full width ---------- */
 
 .section {
-  display: grid;
-  grid-template-columns: var(--margin-col) minmax(0, 1fr);
-  gap: var(--s5) var(--s7);
-  padding: var(--s8) 0 var(--s9);
+  padding: var(--s7) 0 var(--s8);
   border-top: 1px solid var(--line);
 }
 
 .section > h2 {
-  position: sticky;
-  top: 84px;
-  align-self: start;
-  padding-top: 0.75rem;
+  margin-bottom: var(--s3);
   color: var(--lavender);
   font-size: 1rem;
   font-weight: 600;
@@ -569,7 +563,7 @@ h1 {
 .section-body { display: grid; align-content: start; }
 
 .lede {
-  max-width: 26ch;
+  max-width: 30ch;
   color: var(--bright);
   font-size: clamp(1.9rem, 1.3rem + 1.9vw, 2.9rem);
   font-weight: 600;
@@ -584,10 +578,10 @@ h1 {
   color: var(--subtext-1);
   font-size: 1.0625rem;
 }
-.section-note { margin-bottom: var(--s7); }
+.section-note { margin-bottom: var(--s6); }
 
 .sub-head {
-  margin-top: var(--s8);
+  margin-top: var(--s7);
   color: var(--bright);
   font-size: 1.35rem;
   font-weight: 600;
@@ -602,7 +596,7 @@ h1 {
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   gap: var(--s5) var(--s7);
   align-items: start;
-  margin: var(--s5) 0 var(--s8);
+  margin: var(--s5) 0 var(--s7);
 }
 .lab-intro > p { max-width: 58ch; color: var(--subtext-1); font-size: 1.125rem; }
 
@@ -642,20 +636,22 @@ h1 {
 /* The request path runs downward: a quiet arrow column marks direction. */
 
 /* Decision records: a ruled ledger, not a card grid. */
-.records { margin: var(--s5) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
-.record {
+.records {
   display: grid;
-  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
-  gap: var(--s3) var(--s7);
-  padding: var(--s6) 0;
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s7);
+  margin: var(--s5) 0 0;
+  padding: 0;
+  list-style: none;
 }
-.record h4 { font-size: 1.25rem; line-height: 1.3; }
+.record { padding: 20px 0 var(--s5); border-top: 1px solid var(--line-strong); }
+.record h4 { font-size: 1.2rem; line-height: 1.3; }
+.record .decision { margin-top: var(--s3); }
 
-.decision { display: grid; gap: var(--s3); margin: 0; }
-.decision > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--s4); }
+.decision { display: grid; gap: var(--s2); margin: 0; }
+.decision > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--s3); }
 .decision dt { color: var(--lavender); font-size: 0.94rem; font-weight: 600; line-height: 1.7rem; }
-.decision dd { max-width: var(--measure); margin: 0; color: var(--subtext-1); font-size: 1.0625rem; line-height: 1.7rem; }
+.decision dd { max-width: var(--measure); margin: 0; color: var(--subtext-1); font-size: 1.0625rem; line-height: 1.6; }
 .decision > div:nth-child(3) dt { color: var(--green); }
 
 .pipe { display: flex; flex-wrap: wrap; gap: 4px 0; margin: var(--s3) 0 0; padding: 0; list-style: none; font-size: 0.88rem; }
@@ -755,7 +751,7 @@ h1 {
   display: grid;
   grid-template-columns: 14rem minmax(0, 1fr);
   gap: var(--s3) var(--s7);
-  padding: var(--s6) 0;
+  padding: var(--s5) 0;
   border-bottom: 1px solid var(--line);
 }
 .role-meta { display: grid; align-content: start; gap: 2px; }
@@ -906,8 +902,7 @@ h1 {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1100px) {
-  :root { --margin-col: 8.5rem; }
-  .record { grid-template-columns: minmax(0, 1fr); }
+  .records { grid-template-columns: minmax(0, 1fr); }
   .quotes-featured { grid-template-columns: minmax(0, 1fr); max-width: 60ch; }
 }
 
@@ -927,8 +922,7 @@ h1 {
   .facts-primary { margin-top: var(--s6); }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s6); }
   .hero > .facts-more { padding-top: var(--s5); border-top: 1px solid var(--line); }
-  .section { grid-template-columns: minmax(0, 1fr); gap: var(--s4); padding: var(--s7) 0 var(--s8); }
-  .section > h2 { position: static; padding-top: 0; }
+  .section { padding: var(--s6) 0 var(--s7); }
   .lab-intro { grid-template-columns: minmax(0, 1fr); }
   .contact-body { grid-template-columns: minmax(0, 1fr); }
   .contact-side .sub-head:first-child { margin-top: 0; }
@@ -994,8 +988,7 @@ h1 {
 @media print {
   body { background: #fff; color: #111; }
   .site-header, .workbench, .contact-form, .skip-link, .cursor { display: none !important; }
-  .hero, .section { display: block; padding: 24px 0; }
-  .section > h2 { position: static; }
+  .hero, .section, .records { display: block; padding: 24px 0; }
   h1, h2, h3, h4, .lede, .case-title, .facts dd, .quote blockquote p { color: #111; }
   .evidence pre { color: #111; background: #eee; white-space: pre-wrap; overflow: visible; }
   .case:not([open]) > :not(summary) { display: block; }

@@ -128,7 +128,9 @@ class SiteTests(unittest.TestCase):
         self.assertNotRegex(pages + css, r"(?i)space[ +]grotesk")
         self.assertRegex(css, r'--sans:\s*"IBM Plex Sans"')
         self.assertRegex(css, r'--mono:\s*"JetBrains Mono"')
-        for name in re.findall(r'url\("(assets/fonts/[^"]+\.woff2)"\)', css):
+        fonts = re.findall(r'url\("(assets/fonts/[^"?]+\.woff2)(?:\?[^"]*)?"\)', css)
+        self.assertEqual(len(fonts), 4)
+        for name in fonts:
             with self.subTest(font=name):
                 self.assertTrue((ROOT / name).is_file())
         for licence in ("OFL-IBM-Plex-Sans.txt", "OFL-JetBrains-Mono.txt"):

@@ -72,9 +72,9 @@
       }
     </script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="styles.css?v=15">
+    <link rel="stylesheet" href="styles.css?v=16">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -189,7 +189,7 @@
                 <div><dt>Control</dt><dd>Forgejo, Forgejo Actions and Ansible; OpenBao short-lived SSH certificates</dd></div>
                 <div><dt>Patching</dt><dd>A daily pull request with exact package versions for every running container</dd></div>
                 <div><dt>Signals</dt><dd>Wazuh, Prometheus, Blackbox and Grafana, with alerts that wake an agent</dd></div>
-                <div><dt>Agents</dt><dd>T3 Code and Pi agent threads, plus Renovate, all working through pull requests</dd></div>
+                <div><dt>Agents</dt><dd>A T3 Code coordinator with a Pi agent thread per task and shared OpenViking memory, plus Renovate</dd></div>
                 <div><dt>Knowledge</dt><dd>Homelable, OpenViking memory, Ollama on a local GPU, MCP</dd></div>
               </dl>
             </div>
@@ -203,39 +203,39 @@
               <h4>Infrastructure that changes through Git, not SSH sessions.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>Hand edits over SSH drift away from the documentation and leave no clean way back.</dd></div>
-                <div><dt>Decision</dt><dd>Host configuration, proxy routes and DNS records live in Forgejo. Forgejo Actions runs Ansible to apply them across the LXC fleet, so every change has a commit, a pipeline run and a revert path.</dd></div>
+                <div><dt>Decision</dt><dd>Host configuration, proxy routes and DNS records live in Forgejo; Forgejo Actions runs Ansible to apply them. Every change has a commit, a pipeline run and a revert path.</dd></div>
                 <div><dt>Check</dt><dd>Repeat the run against a healthy host: an idempotent playbook should report no changes.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>AI agents go through the same gate as everyone else.</h4>
               <dl class="decision">
-                <div><dt>Problem</dt><dd>Coding agents and dependency bots can propose changes faster than anyone can watch them, and a green status is easy to over-trust.</dd></div>
-                <div><dt>Decision</dt><dd>I work through one coordinating agent in T3 Code. It hands each task to its own Pi agent thread with a written brief, limits and a required report back, and all of them share long-term memory in OpenViking. Each new Renovate dependency pull request automatically gets its own review thread. A change merges only at the exact commit that passed the required checks and an independent review, never by force, and anything that would restart the agents&rsquo; own host stops at a ready pull request for me.</dd></div>
-                <div><dt>Check</dt><dd>After a merge, the deploy run and the installed version are read back on the host. A passing pipeline alone does not count as deployed.</dd></div>
+                <div><dt>Problem</dt><dd>Agents and dependency bots propose changes faster than anyone can watch, and a green status is easy to over-trust.</dd></div>
+                <div><dt>Decision</dt><dd>Agents and Renovate open pull requests like any other contributor. A change merges only at the exact commit that passed the required checks and an independent review; anything that would restart the agents&rsquo; own host waits for me.</dd></div>
+                <div><dt>Check</dt><dd>After a merge, the deploy run and the installed version are read back on the host; a passing pipeline alone does not count.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>Operating-system patches arrive as a daily pull request.</h4>
               <dl class="decision">
-                <div><dt>Problem</dt><dd>Unattended upgrades change hosts with no review, and once something breaks there is no record of which version did it.</dd></div>
-                <div><dt>Decision</dt><dd>Every day a bot proposes a lockfile with the exact pending package versions for every running container. Merging it applies the lock one container at a time, each right after its own Proxmox snapshot. GPU driver packages stay pinned to the host, and services that cannot be restarted safely are reported instead of restarted.</dd></div>
-                <div><dt>Check</dt><dd>The apply step refuses to run unless the lock comes from the latest merged batch, and it skips any container whose packages changed since the plan. Installed versions are read back afterwards.</dd></div>
+                <div><dt>Problem</dt><dd>Unattended upgrades change hosts with no review and no record of which version broke what.</dd></div>
+                <div><dt>Decision</dt><dd>A bot proposes a daily lockfile of exact package versions for every running container. Merging applies it one container at a time, each right after its own Proxmox snapshot.</dd></div>
+                <div><dt>Check</dt><dd>Apply refuses a lock that is not from the latest merged batch and skips containers that changed since the plan; installed versions are read back.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>New containers enroll themselves into monitoring.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>New containers are easy to miss, and a fresh guest has no managed SSH access yet.</dd></div>
-                <div><dt>Decision</dt><dd>After stable discovery, Ansible connects over pinned Proxmox SSH and runs inside the guest. It installs a Wazuh agent matched to the manager and a node exporter, then writes only its own scrape targets, atomically.</dd></div>
-                <div><dt>Check</dt><dd>A guest counts as enrolled only when Wazuh shows the agent active, Prometheus has a healthy target with fresh samples, and a repeat run changes nothing.</dd></div>
+                <div><dt>Decision</dt><dd>After stable discovery, Ansible reaches the guest through pinned Proxmox SSH, installs a matched Wazuh agent and a node exporter, and atomically writes only its own scrape targets.</dd></div>
+                <div><dt>Check</dt><dd>Enrolled means: Wazuh shows the agent active, Prometheus has fresh samples, and a repeat run changes nothing.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>One sign-in for people, short-lived certificates for automation.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>A password per app for people and long-lived keys for automation both widen the blast radius.</dd></div>
-                <div><dt>Decision</dt><dd>Authelia provides single sign-on, through native OIDC where an app supports it and Caddy forward-auth where it does not. Managed hosts accept short-lived OpenBao SSH certificates against pinned host keys instead of stored keys.</dd></div>
+                <div><dt>Decision</dt><dd>Authelia single sign-on through native OIDC or Caddy forward-auth. Managed hosts accept short-lived OpenBao SSH certificates against pinned host keys.</dd></div>
                 <div><dt>Check</dt><dd>Certificate SSH and sudo are tested on a host before it counts as managed.</dd></div>
               </dl>
             </li>
@@ -243,24 +243,24 @@
               <h4>A real edge router, and network zones that cannot see each other.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>On a flat network, one compromised service can reach every other one.</dd></div>
-                <div><dt>Decision</dt><dd>A MikroTik router is the edge, with CrowdSec and WireGuard restricted to approved peers. Guests sit in separate management, core, edge and automation VLANs with default-deny between zones, and each allowed path is a specific router rule added by a reviewed change. A few core services stay on the trusted network by deliberate choice. Blocky answers internal DNS and Caddy serves internal services over HTTPS.</dd></div>
-                <div><dt>Check</dt><dd>A canary check confirms the forbidden paths stay closed, and Blackbox probes internal names over HTTPS, including certificate expiry.</dd></div>
+                <div><dt>Decision</dt><dd>A MikroTik edge with CrowdSec and peer-restricted WireGuard. Guests sit in management, core, edge and automation VLANs with default-deny between them; each allowed path is a reviewed router rule.</dd></div>
+                <div><dt>Check</dt><dd>A canary check confirms forbidden paths stay closed; Blackbox probes internal HTTPS names, including certificate expiry.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>Signals before guesses.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>Without signals, every incident starts with guessing which layer failed.</dd></div>
-                <div><dt>Decision</dt><dd>Wazuh for security events and agent health, Prometheus and node exporters for host metrics, Blackbox for endpoint probes, Grafana to investigate in one place. Grafana alerts post to a webhook that wakes the coordinating agent, which re-checks the live state before it reports.</dd></div>
-                <div><dt>Check</dt><dd>Probes expect a real response from the endpoint, not just an open port, and a failed collection counts as down rather than silent. Alert delivery to the agent was proven end to end with a test alert.</dd></div>
+                <div><dt>Decision</dt><dd>Wazuh for security events, Prometheus for host metrics, Blackbox for endpoint probes, Grafana to investigate. Alerts wake the coordinating agent, which re-checks live state before reporting.</dd></div>
+                <div><dt>Check</dt><dd>Probes expect a real response, not just an open port, and a failed collection counts as down. Alert delivery was proven with a test alert.</dd></div>
               </dl>
             </li>
             <li class="record">
               <h4>Documentation and AI tooling that remember the estate.</h4>
               <dl class="decision">
                 <div><dt>Problem</dt><dd>Context about the estate gets lost between sessions, people and AI agents.</dd></div>
-                <div><dt>Decision</dt><dd>Homelable holds inventory and runbooks. OpenViking gives agents memory across sessions. Local models run on Ollama on a passed-through GPU, with the NVIDIA driver pinned to the host&rsquo;s version by a workflow. MCP connects agents to lab tooling, and changes still go through Git.</dd></div>
-                <div><dt>Check</dt><dd>Notes are a starting point, not evidence: live state is read back before a change, and inventory and runbooks are updated after it.</dd></div>
+                <div><dt>Decision</dt><dd>Homelable holds inventory and runbooks, OpenViking gives agents memory across sessions, and Ollama runs local models on a passed-through GPU. Changes still go through Git.</dd></div>
+                <div><dt>Check</dt><dd>Notes are a starting point, not evidence: live state is read back before a change, and the runbooks are updated after it.</dd></div>
               </dl>
             </li>
           </ol>
@@ -501,6 +501,6 @@ if (
       <a class="to-top" href="#top">back to top</a>
     </footer>
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script defer src="script.js?v=13"></script>
+    <script defer src="script.js?v=14"></script>
   </body>
 </html>
