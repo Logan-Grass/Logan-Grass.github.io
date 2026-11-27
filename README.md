@@ -14,6 +14,7 @@ Core content, project details, downloads, and contact submission remain usable w
 | Catppuccin Mocha palette, layout, responsive rules, print, and reduced motion | `styles.css` |
 | Local-only terminal, interactive map, progressive enhancements, and contact feedback | `script.js` |
 | Resume, certificates, social preview, and locally stored icons | `assets/` |
+| Tab icon: `favicon.svg` (a `>_` prompt drawn as shapes, no font), `favicon.ico`, `apple-touch-icon.png` | repository root |
 | Public-safe source excerpts and provenance | `assets/evidence/` |
 | Technical write-up (lab detail, field work, tools, all ticket responses, certificates) | `details.html` |
 | Not-found page | `404.html` |

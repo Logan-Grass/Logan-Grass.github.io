@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#171725"/>
-  <text x="32" y="44" font-family="ui-monospace, Consolas, monospace" font-size="30"
-        font-weight="700" fill="#b4befe" text-anchor="middle">lg</text>
+  <title>Logan Grass</title>
+  <rect width="64" height="64" rx="14" fill="#1e1e2e"/>
+  <path d="M15 19 31 32 15 45" fill="none" stroke="#b4befe" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="36" y="39" width="16" height="7" rx="2" fill="#b4befe"/>
 </svg>

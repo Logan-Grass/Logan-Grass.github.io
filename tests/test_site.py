@@ -210,6 +210,19 @@ class SiteTests(unittest.TestCase):
         # No unused or non-WebP files hide in assets/img.
         self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()}, seen)
 
+    def test_favicon_is_a_shape_not_text_and_linked_everywhere(self):
+        svg = (ROOT / "favicon.svg").read_text()
+        # Text would depend on an installed font; a tab icon must not.
+        self.assertNotIn("<text", svg)
+        ico = (ROOT / "favicon.ico").read_bytes()
+        self.assertEqual(ico[:4], b"\x00\x00\x01\x00")
+        apple = (ROOT / "apple-touch-icon.png").read_bytes()
+        self.assertEqual(apple[:8], b"\x89PNG\r\n\x1a\n")
+        for name in ("index.html", "details.html", "404.html"):
+            html = (ROOT / name).read_text()
+            for target in ("favicon.svg", "favicon.ico", "apple-touch-icon.png"):
+                self.assertIn(target, html, f"{name} should link {target}")
+
     def test_main_page_stays_short(self):
         # Owner, 2026-11-27: "way too much text and technical ... less is more".
         text = re.sub(r"<script.*?</script>|<style.*?</style>|<svg.*?</svg>", "",
