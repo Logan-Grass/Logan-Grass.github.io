@@ -15,6 +15,7 @@ Core content, project details, downloads, and contact submission remain usable w
 | Local-only terminal, interactive map, progressive enhancements, and contact feedback | `script.js` |
 | Resume, certificates, social preview, and locally stored icons | `assets/` |
 | Public-safe source excerpts and provenance | `assets/evidence/` |
+| Technical write-up (lab detail, field work, tools, all ticket responses, certificates) | `details.html` |
 | Not-found page | `404.html` |
 | Site integrity and public-content checks | `tests/test_site.py` |
 
@@ -27,14 +28,24 @@ italic-serif marketing headlines and anonymous profile-card layouts. Improve hie
 spacing, and navigation without removing personality.
 
 The November 2026 pass applied the anti-template guidance from
-[Impeccable](https://github.com/pbakaus/impeccable): sections read like a man page, with the
-section name (`~/lab`) as the heading in a left margin and one readable column beside it.
-Rules and spacing group content; the terminal and map are the only boxed panels. Body
-text is 17px or larger, secondary text meets WCAG AA contrast on the Mocha background, and
-labels are sentence case in the sans face. Do not
-reintroduce eyebrow labels or section numbers above headings, grids of identical cards,
-fake window-control dots, decorative glass blur, one-sided accent bars, or a scroll-reveal
-animation on every section. `tests/test_site.py` guards the mechanical parts of this.
+[Impeccable](https://github.com/pbakaus/impeccable), then the owner asked for less text and
+the AI agent work up front (2026-11-27). Every main-page section is a "scene", modelled on the
+404 page the owner likes: a terminal line, one plain headline, a sentence or two, one picture
+in the flow, and one action. Pictures alternate sides. The terminal and map are the only
+boxed panels. Body text is 17px or larger and secondary text meets WCAG AA contrast on the
+Mocha background. Do not reintroduce eyebrow labels or section numbers above headings, grids
+of identical cards, fake window-control dots (also none inside the drawings), decorative glass
+blur, glow, gradients on illustrations, one-sided accent bars, or a scroll-reveal animation on
+every section. No robots, brains, sparkles or chatbot widgets for the AI story: it is told with
+plain words, the scripted terminal exchange and one coordinator-to-agents-to-approval drawing.
+`tests/test_site.py` guards the mechanical parts of this, including a word budget for the main page.
+
+The main page stays short (under 1,000 visible words). Anything technical lives on
+`details.html` ("the long version"): the lab diagrams and evidence, field work, the full tool list,
+all thirteen ticket responses and certificate PDFs. History dates sit in the left column. The
+hero terminal plays a short scripted agent exchange: static text in the HTML, revealed a line at a
+time only when JavaScript is on and reduced motion is off, and labelled as a scripted example. No
+model is called.
 
 Lead with a clear professional introduction, then make the homelab a substantial engineering
 showcase rather than an afterthought below the skills list. Professional client work and
@@ -62,8 +73,7 @@ its content separately.
 
 The backdrop is a static Mocha gradient with restrained lavender/blue illumination, not a
 repeating grid. Essential content stays visible without waiting for scroll-reveal callbacks.
-Ticket feedback shows three featured responses and a ruled list of the rest; all thirteen are
-visible without JavaScript, with no filter or collapse step.
+The main page shows three ticket responses; `details.html` lists all thirteen, visible without JavaScript.
 Grid children may shrink, and desktop navigation wraps when enlarged text needs more room.
 The sticky header's full-width background is its own 100%-width box, not a `100vw`
 pseudo-element: `100vw` includes desktop scrollbars and can make the page scroll sideways.
@@ -105,8 +115,8 @@ necessary excerpt. Do not replace genuine evidence with staged dashboards or inv
   widths for `srcset`). They were generated with an image model, cropped, and the background
   keyed out so they sit on the page's own Mocha base; lavender fills are softened. One style
   only: flat line work, Mocha slate and restrained lavender, no brown, no text or letters, no
-  faces, no mascots. Add new ones the same way, with `width`/`height`, `loading="lazy"` (the hero
-  image and the 404 image are the exceptions), and `alt=""` when they only decorate nearby text.
+  faces, no mascots, no robots or brains. Add new ones the same way, with `width`/`height`,
+  `loading="lazy"` (the 404 image is the exception), and `alt=""` when they only decorate nearby text.
   `tests/test_site.py` checks size, format, attributes and that no unused files linger.
 
 ## Preview and checks

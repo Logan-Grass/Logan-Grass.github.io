@@ -87,6 +87,9 @@ html {
 
 body {
   margin: 0;
+  /* Short pages (the 404) still get the whole viewport painted by the gradient. */
+  min-height: 100vh;
+  min-height: 100dvh;
   /* Clip decoration without creating a horizontally scrollable body. */
   overflow-x: clip;
   background-color: var(--base);
@@ -322,7 +325,6 @@ main,
 .hero > .workbench { grid-area: bench; }
 .hero > .facts { grid-area: facts; }
 /* Wide screens: the two lists read as one summary under the introduction. */
-.hero > .facts-more { margin-top: 0; padding-top: var(--s3); border-top: 0; }
 
 h1 {
   font-size: clamp(2.6rem, 1.6rem + 3.8vw, 4.6rem);
@@ -370,7 +372,7 @@ h1 {
 
 .terminal-history {
   min-height: 200px;
-  max-height: 272px;
+  max-height: 300px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -378,6 +380,7 @@ h1 {
 }
 .terminal-history:focus-visible { outline-offset: 2px; }
 .t-line { color: var(--subtext-0); white-space: pre-wrap; overflow-wrap: anywhere; }
+.t-who { margin-right: 1ch; color: var(--teal); font-weight: 600; }
 .t-cmd { margin-top: 6px; color: var(--text); }
 .t-cmd:first-child { margin-top: 0; }
 .t-ps1 { color: var(--lavender); font-weight: 600; }
@@ -744,28 +747,16 @@ h1 {
 .role {
   display: grid;
   grid-template-columns: 14rem minmax(0, 1fr);
-  gap: var(--s3) var(--s7);
+  gap: var(--s2) var(--s7);
   padding: var(--s5) 0;
   border-bottom: 1px solid var(--line);
 }
-.role-meta { display: grid; align-content: start; gap: 2px; }
-.role-meta time { color: var(--lavender); font-size: 0.97rem; font-weight: 600; }
-.role.is-current .role-meta time { color: var(--green); }
-.role-org { color: var(--bright); font-weight: 600; }
-.role-place { color: var(--subtext-0); font-size: 0.94rem; }
+/* Dates live in the left column, like every other section. */
+.role > time { color: var(--lavender); font-size: 0.97rem; font-weight: 600; line-height: 1.9rem; }
+.role.is-current > time { color: var(--green); }
+.role-org { display: block; margin-top: 2px; color: var(--subtext-0); font-size: 0.94rem; font-weight: 400; line-height: 1.5; }
 .role-body h3 { margin-bottom: var(--s2); font-size: 1.25rem; line-height: 1.3; }
 .role-body p { max-width: var(--measure); color: var(--subtext-1); }
-
-.progression { display: grid; gap: var(--s5); margin: 0; padding: 0; list-style: none; }
-.duties { max-width: var(--measure); margin: var(--s3) 0 0; padding-left: 1.25rem; color: var(--subtext-1); }
-.duties li { margin-top: 6px; }
-.duties li::marker { color: var(--lavender); }
-.progression h3 time {
-  margin-left: 10px;
-  color: var(--subtext-0);
-  font-size: 0.94rem;
-  font-weight: 400;
-}
 
 /* ---------- Toolkit ---------- */
 
@@ -885,30 +876,67 @@ h1 {
 .to-top:hover { color: var(--lavender); }
 .to-top { text-decoration: underline; text-underline-offset: 3px; }
 
-/* ---------- Illustrations ---------- */
+/* ---------- Illustrations and scenes ---------- */
 /* Wordless line drawings (generated, then cleaned up) on the page's own base
-   colour, so they sit in the page like the diagrams: no frame, no card. */
+   colour. No frame, no card: each sits beside its text like the 404 page does. */
 
-.art-band {
-  width: min(calc(100% - var(--gutter)), var(--max));
-  margin: 0 auto var(--s7);
-}
-.art-band img,
-.section-art img,
 .diagram.spot img,
+.scene-art img,
 .not-found-art img { display: block; width: 100%; height: auto; }
 .diagram.spot img { max-width: 460px; }
-.section-art { margin: 0 0 var(--s6); }
-.spot-work img { max-width: 560px; }
 .not-found-art { margin: var(--s6) 0 0; }
 .not-found-art img { max-width: 520px; }
 
-/* The history drawing only has a place where the heading leaves room beside it. */
-.spot-history { display: none; }
-#experience .section-body { position: relative; }
-@media (min-width: 1180px) {
-  .spot-history { display: block; position: absolute; top: 0; right: 0; width: 340px; margin: 0; }
+/* A scene is the 404 page's recipe: a terminal line, one plain headline, a sentence
+   or two, one picture in the flow, one action. Two columns, picture alternating. */
+.scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--s7) var(--s8);
+  align-items: center;
 }
+.scene.flip { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); }
+.scene.flip > .scene-art { order: -1; }
+#experience > .scene { margin-bottom: var(--s7); }
+.scene-text > .t-cmd { margin: 0 0 var(--s4); }
+.scene h2 {
+  max-width: 22ch;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.scene-lede { max-width: 52ch; margin-top: var(--s4); color: var(--subtext-1); font-size: 1.125rem; }
+.scene-note { max-width: 52ch; margin-top: var(--s4); color: var(--subtext-0); font-size: 0.94rem; }
+.scene .contact-form { margin-top: var(--s5); }
+.scene-action { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--s3); }
+.scene-art { justify-self: center; width: 100%; }
+.scene-art-tall { max-width: 440px; }
+
+.short-list {
+  margin: var(--s5) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-strong);
+}
+.short-list li { padding: 10px 0; border-bottom: 1px dashed var(--line); color: var(--subtext-1); }
+.short-list strong { color: var(--bright); font-weight: 600; }
+
+.wins { margin: var(--s5) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+.wins li { padding: var(--s4) 0; border-bottom: 1px dashed var(--line); }
+.win-result { color: var(--lavender); font-size: 0.97rem; font-weight: 600; }
+.wins h3 { margin: 2px 0 var(--s2); font-size: 1.2rem; line-height: 1.3; }
+.wins li > p:last-child { color: var(--subtext-1); }
+
+.quotes-short { display: grid; gap: var(--s5); margin-top: var(--s5); }
+.quotes-short .quote blockquote p { font-size: 1.15rem; }
+
+.details-intro {
+  width: min(calc(100% - var(--gutter)), var(--max));
+  margin: 0 auto;
+  padding: var(--s8) 0 var(--s7);
+}
+.details-intro .intro { margin-bottom: var(--s5); }
+.details-intro h1 { margin: var(--s4) 0 0; }
 
 /* ---------- 404 ---------- */
 
@@ -921,6 +949,14 @@ h1 {
 .not-found h1 { margin: var(--s6) 0 0; font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem); line-height: 1.1; }
 
 /* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .scene, .scene.flip { grid-template-columns: minmax(0, 1fr); gap: var(--s6); align-items: start; }
+  .scene.flip > .scene-art { order: 0; }
+  .scene-art { max-width: 520px; justify-self: start; }
+  .scene-art-tall { max-width: 380px; }
+  .scene h2 { max-width: none; }
+}
 
 @media (max-width: 1100px) {
   .records { grid-template-columns: minmax(0, 1fr); }
@@ -942,7 +978,6 @@ h1 {
   }
   .facts-primary { margin-top: var(--s6); }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s6); }
-  .hero > .facts-more { padding-top: var(--s5); border-top: 1px solid var(--line); }
   .section { padding: var(--s6) 0 var(--s7); }
   .lab-intro { grid-template-columns: minmax(0, 1fr); }
   .contact-body { grid-template-columns: minmax(0, 1fr); }
@@ -956,7 +991,7 @@ h1 {
   .facts { grid-template-columns: minmax(0, 1fr); }
   .facts-primary { margin-top: var(--s5); }
   .actions { margin-bottom: 0; }
-  .terminal-history { min-height: 160px; max-height: 220px; }
+  .terminal-history { min-height: 160px; max-height: 330px; }
   .topology-grid { grid-template-columns: minmax(0, 1fr); }
   .topo-side { border-top: 1px solid var(--line-strong); }
   .evidence-grid,
@@ -1014,7 +1049,7 @@ h1 {
 @media print {
   body { background: #fff; color: #111; }
   .site-header, .workbench, .contact-form, .skip-link, .cursor,
-  .art-band, .section-art, .diagram.spot, .not-found-art { display: none !important; }
+  .scene-art, .diagram.spot, .not-found-art { display: none !important; }
   .hero, .section, .records { display: block; padding: 24px 0; }
   h1, h2, h3, h4, .lede, .case-title, .facts dd, .quote blockquote p { color: #111; }
   .evidence pre { color: #111; background: #eee; white-space: pre-wrap; overflow: visible; }

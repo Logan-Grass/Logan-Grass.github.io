@@ -90,7 +90,7 @@ function resumeLink() {
 // or { node } for a trusted element created in this file.
 const TERMINAL_COMMANDS = Object.freeze({
   help: () => [
-    "navigation   lab  work  history  toolkit  tickets  contact",
+    "navigation   agents  lab  work  history  tickets  contact",
     "about me     whoami  role  certs  uptime  resume",
     "this shell   ls  pwd  date  map  clear  help",
     { text: "Commands are matched locally; nothing is executed.", kind: "dim" }
@@ -111,16 +111,17 @@ const TERMINAL_COMMANDS = Object.freeze({
     "help desk → help desk manager → field escalation → embedded support → Tier II → project manager"
   ],
   pwd: () => ["/los-angeles/operations"],
-  ls: () => [{ text: "lab/  work/  history/  toolkit/  tickets/  contact/  resume.pdf", kind: "dirs" }],
+  ls: () => [{ text: "agents/  lab/  work/  history/  tickets/  contact/  resume.pdf", kind: "dirs" }],
   date: () => [laDate.format(new Date())],
   resume: () => [{ node: resumeLink() }, { text: "PDF download, current revision.", kind: "dim" }],
+  agents: () => [
+    "a coordinator hands each task to its own agent; they share memory between sessions",
+    "they open pull requests like anyone else; a change merges only after checks and an independent review",
+    "anything that would restart the server waits for me",
+    { text: "→ ~/agents", kind: "ok", target: "#agents" }
+  ],
   lab: () => [
-    "Proxmox + Debian/Ubuntu containers; changes go Forgejo → Actions → Ansible",
-    "access: Authelia SSO for people, short-lived OpenBao SSH certificates for automation",
-    "network: management, core, edge and automation VLANs, default-deny between zones",
-    "patching: daily pull request with exact package versions, snapshot before each container",
-    "signals: Wazuh, Prometheus, Blackbox, Grafana; alerts wake the coordinating agent",
-    "agents: T3 Code + Pi threads and Renovate merge only at the exact checked, reviewed commit",
+    "a small home lab where I practice work habits: changes are written down, new machines enroll themselves in monitoring, access expires on its own",
     { text: "what I'd built by November 2026, not a live status page", kind: "dim" },
     { text: "→ ~/lab", kind: "ok", target: "#lab" }
   ],
@@ -139,7 +140,7 @@ const TERMINAL_COMMANDS = Object.freeze({
   toolkit: () => [
     "M365 / Entra ID / Active Directory / Windows Server / Intune",
     "ConnectWise / Autotask / IT Glue / MikroTik / UniFi / FortiGate / Veeam",
-    { text: "→ ~/toolkit", kind: "ok", target: "#stack" }
+    { text: "the full list is on the technical details page (footer link)", kind: "dim" }
   ],
   tickets: () => [
     "\"He came up with a solution that should be a permanent fix.\"",
@@ -167,6 +168,8 @@ const TERMINAL_ALIASES = Object.freeze({
   "role.txt": "role",
   "job": "role",
   "certifications": "certs",
+  "ai": "agents",
+  "agent": "agents",
   "stack": "toolkit",
   "tools": "toolkit",
   "experience": "history",
@@ -188,6 +191,34 @@ function resolveCommand(raw) {
   name = name.replace(/^(?:cd|cat|open|less|more|ls)\s+/, "").replace(/^~?\.?\//, "").replace(/\/+$/, "");
   if (Object.hasOwn(TERMINAL_ALIASES, name)) name = TERMINAL_ALIASES[name];
   return Object.hasOwn(TERMINAL_COMMANDS, name) ? name : null;
+}
+
+// The scripted exchange at the top of the terminal is plain text in the HTML, so it is
+// fully visible without JavaScript and with reduced motion. With both available it is
+// revealed a line at a time. Nothing is generated or sent anywhere.
+function initScriptedExchange() {
+  const lines = selectAll(".t-script");
+  if (!lines.length || prefersReducedMotion || !("IntersectionObserver" in window)) return;
+
+  const timers = [];
+  const finish = () => {
+    timers.splice(0).forEach(clearTimeout);
+    lines.forEach((line) => { line.hidden = false; });
+  };
+
+  lines.forEach((line) => { line.hidden = true; });
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    lines.forEach((line, index) => {
+      timers.push(setTimeout(() => { line.hidden = false; }, 500 + index * 650));
+    });
+  }, { threshold: 0.4 });
+  observer.observe(lines[0].parentElement);
+
+  // Any use of the terminal shows the rest at once.
+  select("#terminal-form")?.addEventListener("submit", finish);
+  selectAll("[data-terminal-run]").forEach((button) => button.addEventListener("click", finish));
 }
 
 function initTerminal() {
@@ -489,6 +520,7 @@ function initPage() {
     initHeader,
     initMap,
     initTerminal,
+    initScriptedExchange,
     initCaseStudies,
     initContactForm,
     initClock,

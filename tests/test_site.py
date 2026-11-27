@@ -34,6 +34,10 @@ class SiteTests(unittest.TestCase):
         cls.source = (ROOT / "index.html").read_text()
         cls.page = Page()
         cls.page.feed(cls.source)
+        # The long technical write-up lives on its own page; the main page stays short.
+        cls.details = (ROOT / "details.html").read_text()
+        cls.details_page = Page()
+        cls.details_page.feed(cls.details)
 
     def test_unique_ids(self):
         self.assertEqual(len(self.page.ids), len(set(self.page.ids)))
@@ -64,6 +68,9 @@ class SiteTests(unittest.TestCase):
                             for tag, attrs in self.page.elements))
 
     def test_no_private_infrastructure_details(self):
+        for text in (self.details,):
+            self.assertNotRegex(text, r"\b(?:192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+)\b")
+            self.assertNotRegex(text, r"(?i)\bCT\d{3,4}\b|[a-z0-9-]+\.oggie\.casa")
         self.assertNotRegex(self.source, r"\b(?:192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+)\b")
         self.assertNotRegex(self.source, r"(?i)\bCT\d{3,4}\b|[a-z0-9-]+\.oggie\.casa")
 
@@ -148,13 +155,13 @@ class SiteTests(unittest.TestCase):
     def test_identity_provider_is_current(self):
         # Casdoor was retired in November 2026; Authelia is the identity provider.
         script = (ROOT / "script.js").read_text()
-        self.assertNotIn("Casdoor", self.source + script)
-        self.assertIn("Authelia", self.source)
+        self.assertNotIn("Casdoor", self.source + self.details + script)
+        self.assertIn("Authelia", self.details)
 
     def test_every_svg_is_titled_or_hidden(self):
         # Diagrams are informative images: each needs a <title> and <desc> wired up
         # through aria-labelledby. Decorative icons must be hidden from assistive tech.
-        svgs = re.findall(r"<svg\b[^>]*>.*?</svg>", self.source, flags=re.S)
+        svgs = re.findall(r"<svg\b[^>]*>.*?</svg>", self.source + self.details, flags=re.S)
         self.assertGreaterEqual(len([s for s in svgs if 'role="img"' in s]), 6)
         for svg in svgs:
             with self.subTest(svg=svg[:80]):
@@ -172,7 +179,8 @@ class SiteTests(unittest.TestCase):
         # Wordless line drawings (WebP, one palette). Each <img> declares its size so the
         # layout does not jump, is lazy-loaded unless it is the hero image, and carries
         # alt text (empty when the drawing only decorates adjacent text).
-        pages = {"index.html": self.source, "404.html": (ROOT / "404.html").read_text()}
+        pages = {"index.html": self.source, "details.html": self.details,
+                 "404.html": (ROOT / "404.html").read_text()}
         seen = set()
         for name, source in pages.items():
             page = Page()
@@ -183,9 +191,7 @@ class SiteTests(unittest.TestCase):
                     self.assertIn("alt", attrs)
                     self.assertRegex(attrs.get("width", ""), r"^\d+$")
                     self.assertRegex(attrs.get("height", ""), r"^\d+$")
-                    is_hero = "hero-workbench" in attrs["src"]
-                    is_404 = name == "404.html"
-                    if is_hero or is_404:
+                    if name == "404.html":
                         self.assertNotEqual(attrs.get("loading"), "lazy")
                     else:
                         self.assertEqual(attrs.get("loading"), "lazy")
@@ -199,9 +205,51 @@ class SiteTests(unittest.TestCase):
                         self.assertEqual((data[:4], data[8:12]), (b"RIFF", b"WEBP"))
                         self.assertLess(len(data), 150 * 1024)
             if name == "index.html":
-                self.assertEqual(sum(1 for a in images if "hero-workbench" in a["src"]), 1)
+                # One picture per scene, each beside its text.
+                self.assertEqual(len(images), 6)
         # No unused or non-WebP files hide in assets/img.
         self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()}, seen)
+
+    def test_main_page_stays_short(self):
+        # Owner, 2026-11-27: "way too much text and technical ... less is more".
+        text = re.sub(r"<script.*?</script>|<style.*?</style>|<svg.*?</svg>", "",
+                      self.source, flags=re.S)
+        body = re.sub(r"<[^>]+>", " ", text.split("<body", 1)[1])
+        self.assertLess(len(body.split()), 1000)
+        # Technical depth moved to the details page, which the main page links to.
+        self.assertIn("details.html", self.source)
+        self.assertNotIn('id="stack"', self.source)
+        self.assertNotIn("quotes-more", self.source)
+
+    def test_history_dates_sit_in_the_left_column(self):
+        rows = re.findall(r'<li class="role[^"]*">\s*<time\b', self.source)
+        self.assertEqual(len(rows), self.source.count('<li class="role'))
+        self.assertGreaterEqual(len(rows), 6)
+
+    def test_agent_story_leads_and_terminal_script_is_plain_text(self):
+        self.assertLess(self.source.index('id="agents"'), self.source.index('id="lab"'))
+        script_lines = re.findall(r'<p class="[^"]*t-script[^"]*"[^>]*>', self.source)
+        self.assertGreaterEqual(len(script_lines), 4)
+        for tag in script_lines:  # visible without JavaScript
+            self.assertNotIn("hidden", tag)
+        js = (ROOT / "script.js").read_text()
+        self.assertIn("prefersReducedMotion", js[js.index("function initScriptedExchange"):js.index("function initTerminal")])
+        self.assertNotRegex(js, r"\bfetch\([^)]*(openai|anthropic|ollama|api/generate)")
+
+    def test_agent_copy_avoids_ai_startup_cliches(self):
+        text = (self.source + self.details).lower()
+        for phrase in ("revolutioniz", "supercharge", "unleash", "next-gen", "cutting-edge", "game-chang"):
+            self.assertNotIn(phrase, text)
+        css = (ROOT / "styles.css").read_text()
+        self.assertNotRegex(css, r"(?i)linear-gradient\([^)]*(?:#8|#6|#7)[0-9a-f]{5}[^)]*(?:#0|#3|#4)[0-9a-f]{5}")
+        self.assertNotRegex(css, r"box-shadow:[^;]*0 0 \d{2,}px\s+(?!0)")
+
+    def test_short_pages_fill_the_viewport_with_the_background(self):
+        # The 404 page is short; the page background must still cover the whole window.
+        css = (ROOT / "styles.css").read_text()
+        body = re.search(r"\nbody\s*\{([^}]+)\}", css)
+        self.assertIsNotNone(body)
+        self.assertRegex(body.group(1) if body else "", r"min-height:\s*100d?vh")
 
     def test_current_role_and_private_job_details(self):
         # Promoted to Project Manager on 2026-11-18. Offer-letter details stay private.
@@ -209,8 +257,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("Project Manager", self.source)
         self.assertIn('"jobTitle": "Project Manager"', self.source)
         self.assertIn("Nov 2026", self.source)
-        self.assertNotIn("Help Desk Engineer, Tier II <span>", self.source)
-        text = self.source + script
+        text = self.source + self.details + script
         self.assertNotRegex(text, r"(?i)\$\s?\d|\b(salary|hourly|bonus|401k|PTO|benefits)\b")
         self.assertNotRegex(text, r"(?i)\bLCPs?\b|centralized services|AI initiative|75\s?%")
 
