@@ -42,7 +42,7 @@ plain words, the scripted terminal exchange and one coordinator-to-agents-to-app
 `tests/test_site.py` guards the mechanical parts of this, including a word budget for the main page.
 
 The main page stays short (under 1,000 visible words). Anything technical lives on
-`details.html` ("the long version"): the lab diagrams and evidence, field work, the full tool list,
+`details.html` ("the technical detail"): the lab diagrams and evidence, field work, the full tool list,
 all thirteen ticket responses and certificate PDFs. History dates sit in the left column. The
 hero terminal plays a short scripted agent exchange: static text in the HTML, revealed a line at a
 time only when JavaScript is on and reduced motion is off, and labelled as a scripted example. No

@@ -28,6 +28,40 @@ class Page(HTMLParser):
                 self.refs.append(attrs[name])
 
 
+class Node:
+    def __init__(self, tag, attrs, parent):
+        self.tag = tag
+        self.classes = (dict(attrs).get("class") or "").split()
+        self.parent = parent
+        self.children = []
+
+
+class ElementTree(HTMLParser):
+    """Minimal parent/child tree, enough to check where an element sits."""
+
+    VOID = frozenset({"meta", "link", "img", "input", "br", "hr", "source", "area", "base", "col", "wbr"})
+
+    def __init__(self):
+        super().__init__()
+        self.nodes = []
+        self.open = []
+
+    def handle_starttag(self, tag, attrs):
+        parent = self.open[-1] if self.open else None
+        node = Node(tag, attrs, parent)
+        if parent is not None:
+            parent.children.append(node)
+        self.nodes.append(node)
+        if tag not in self.VOID:
+            self.open.append(node)
+
+    def handle_endtag(self, tag):
+        while self.open and self.open[-1].tag != tag:
+            self.open.pop()
+        if self.open:
+            self.open.pop()
+
+
 class SiteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -209,6 +243,38 @@ class SiteTests(unittest.TestCase):
                 self.assertEqual(len(images), 6)
         # No unused or non-WebP files hide in assets/img.
         self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()}, seen)
+
+    def test_details_page_title_and_top_anchor(self):
+        title = re.search(r"<title>(.*?)</title>", self.details, flags=re.S)
+        self.assertIsNotNone(title)
+        self.assertIn("technical detail", (title.group(1) if title else "").lower())
+        self.assertNotIn("long version", self.details.lower())
+        self.assertIn("top", self.details_page.ids)  # footer "back to top" target
+
+    def test_every_internal_link_resolves_to_an_id(self):
+        ids = {"index.html": set(self.page.ids), "details.html": set(self.details_page.ids)}
+        for name, page in (("index.html", self.page), ("details.html", self.details_page)):
+            for ref in page.refs:
+                target, _, fragment = ref.partition("#")
+                if not fragment or ref.startswith(("http:", "https:")):
+                    continue
+                self.assertIn(target or name, ids, f"{name}: {ref} points at an unknown page")
+                self.assertIn(fragment, ids[target or name], f"{name}: {ref} has no matching id")
+
+    def test_back_links_end_their_section(self):
+        # Each "back to the main page" row must be the last child of its section body,
+        # not stuck inside a nested grid or ahead of later content.
+        walker = ElementTree()
+        walker.feed(self.details)
+        rows = [node for node in walker.nodes if "back-row" in node.classes]
+        self.assertGreaterEqual(len(rows), 5)
+        for row in rows:
+            parent = row.parent
+            self.assertIsNotNone(parent)
+            if parent is None:
+                continue
+            self.assertIn("section-body", parent.classes, f"back row sits in <{parent.tag}>")
+            self.assertIs(parent.children[-1], row, "back row must be last in its section body")
 
     def test_favicon_is_a_shape_not_text_and_linked_everywhere(self):
         svg = (ROOT / "favicon.svg").read_text()
