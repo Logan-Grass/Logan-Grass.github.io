@@ -241,8 +241,8 @@ class SiteTests(unittest.TestCase):
             if name == "index.html":
                 # One picture per scene, each beside its text.
                 self.assertEqual(len(images), 6)
-        # No unused or non-WebP files hide in assets/img.
-        self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()}, seen)
+        # No unused or non-WebP files hide in assets/img; the one SVG is the CSS background.
+        self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()} - {"contours.svg"}, seen)
 
     def test_details_page_title_and_top_anchor(self):
         title = re.search(r"<title>(.*?)</title>", self.details, flags=re.S)
@@ -285,6 +285,17 @@ class SiteTests(unittest.TestCase):
         self.assertIn("100svh - var(--header-h)", block)
         self.assertIn("--header-h", css.split(".hero {")[0])
         self.assertIn('href="#agents"', self.source)  # the cue below the hero
+
+    def test_hero_background_is_a_faint_contour_file_not_a_grid(self):
+        css = (ROOT / "styles.css").read_text()
+        svg = (ROOT / "assets" / "img" / "contours.svg").read_text()
+        self.assertIn("contours.svg", css)
+        self.assertLess(len(svg.encode()), 60_000)
+        self.assertNotIn("<text", svg)
+        self.assertNotIn("<pattern", svg)  # contours only, never a grid pattern
+        opacity = re.search(r"main::before \{.*?opacity: ([0-9.]+);", css, flags=re.S)
+        self.assertIsNotNone(opacity)
+        self.assertLessEqual(float(opacity.group(1)) if opacity else 1, 0.15)
 
     def test_favicon_is_a_shape_not_text_and_linked_everywhere(self):
         svg = (ROOT / "favicon.svg").read_text()
