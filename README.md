@@ -101,6 +101,13 @@ necessary excerpt. Do not replace genuine evidence with staged dashboards or inv
   2026-11-26). It is self-hosted in `assets/fonts/` under the SIL Open Font License (licence
   beside it); do not add a second typeface or load fonts from a third-party CDN.
 - `assets/og-card.svg` is the editable source for the 1200×630 PNG social-sharing card.
+- `assets/img/` holds the wordless line illustrations (WebP with alpha, each under 150 KB, 2–3
+  widths for `srcset`). They were generated with an image model, cropped, and the background
+  keyed out so they sit on the page's own Mocha base; lavender fills are softened. One style
+  only: flat line work, Mocha slate and restrained lavender, no brown, no text or letters, no
+  faces, no mascots. Add new ones the same way, with `width`/`height`, `loading="lazy"` (the hero
+  image and the 404 image are the exceptions), and `alt=""` when they only decorate nearby text.
+  `tests/test_site.py` checks size, format, attributes and that no unused files linger.
 
 ## Preview and checks
 

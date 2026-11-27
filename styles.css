@@ -885,6 +885,31 @@ h1 {
 .to-top:hover { color: var(--lavender); }
 .to-top { text-decoration: underline; text-underline-offset: 3px; }
 
+/* ---------- Illustrations ---------- */
+/* Wordless line drawings (generated, then cleaned up) on the page's own base
+   colour, so they sit in the page like the diagrams: no frame, no card. */
+
+.art-band {
+  width: min(calc(100% - var(--gutter)), var(--max));
+  margin: 0 auto var(--s7);
+}
+.art-band img,
+.section-art img,
+.diagram.spot img,
+.not-found-art img { display: block; width: 100%; height: auto; }
+.diagram.spot img { max-width: 460px; }
+.section-art { margin: 0 0 var(--s6); }
+.spot-work img { max-width: 560px; }
+.not-found-art { margin: var(--s6) 0 0; }
+.not-found-art img { max-width: 520px; }
+
+/* The history drawing only has a place where the heading leaves room beside it. */
+.spot-history { display: none; }
+#experience .section-body { position: relative; }
+@media (min-width: 1180px) {
+  .spot-history { display: block; position: absolute; top: 0; right: 0; width: 340px; margin: 0; }
+}
+
 /* ---------- 404 ---------- */
 
 .not-found {
@@ -988,7 +1013,8 @@ h1 {
 
 @media print {
   body { background: #fff; color: #111; }
-  .site-header, .workbench, .contact-form, .skip-link, .cursor { display: none !important; }
+  .site-header, .workbench, .contact-form, .skip-link, .cursor,
+  .art-band, .section-art, .diagram.spot, .not-found-art { display: none !important; }
   .hero, .section, .records { display: block; padding: 24px 0; }
   h1, h2, h3, h4, .lede, .case-title, .facts dd, .quote blockquote p { color: #111; }
   .evidence pre { color: #111; background: #eee; white-space: pre-wrap; overflow: visible; }

@@ -141,8 +141,9 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in (ROOT / "assets/fonts").iterdir()),
                          ["OFL-JetBrains-Mono.txt", "jetbrains-mono-latin-400-normal.woff2",
                           "jetbrains-mono-latin-600-normal.woff2"])
-        body = re.search(r"body\s*\{([^}]+)\}", css).group(1)
-        self.assertRegex(body, r"font-size:\s*1\.0625rem")
+        body_match = re.search(r"body\s*\{([^}]+)\}", css)
+        self.assertIsNotNone(body_match)
+        self.assertRegex(body_match.group(1) if body_match else "", r"font-size:\s*1\.0625rem")
 
     def test_identity_provider_is_current(self):
         # Casdoor was retired in November 2026; Authelia is the identity provider.
@@ -163,8 +164,44 @@ class SiteTests(unittest.TestCase):
                 title = re.search(r'<title id="([^"]+)">[^<]+</title>', svg)
                 desc = re.search(r'<desc id="([^"]+)">[^<]+</desc>', svg)
                 self.assertTrue(title and desc)
-                self.assertIn(f'aria-labelledby="{title.group(1)} {desc.group(1)}"', svg)
+                if title and desc:
+                    self.assertIn(f'aria-labelledby="{title.group(1)} {desc.group(1)}"', svg)
                 self.assertNotRegex(svg, r"#[0-9a-fA-F]{3,6}\b")
+
+    def test_illustrations_are_small_sized_and_described(self):
+        # Wordless line drawings (WebP, one palette). Each <img> declares its size so the
+        # layout does not jump, is lazy-loaded unless it is the hero image, and carries
+        # alt text (empty when the drawing only decorates adjacent text).
+        pages = {"index.html": self.source, "404.html": (ROOT / "404.html").read_text()}
+        seen = set()
+        for name, source in pages.items():
+            page = Page()
+            page.feed(source)
+            images = [attrs for tag, attrs in page.elements if tag == "img"]
+            for attrs in images:
+                with self.subTest(page=name, src=attrs.get("src")):
+                    self.assertIn("alt", attrs)
+                    self.assertRegex(attrs.get("width", ""), r"^\d+$")
+                    self.assertRegex(attrs.get("height", ""), r"^\d+$")
+                    is_hero = "hero-workbench" in attrs["src"]
+                    is_404 = name == "404.html"
+                    if is_hero or is_404:
+                        self.assertNotEqual(attrs.get("loading"), "lazy")
+                    else:
+                        self.assertEqual(attrs.get("loading"), "lazy")
+                    self.assertNotRegex(attrs["alt"], r"(?i)\b\d{1,3}(?:\.\d{1,3}){3}\b|\bCT\d{3,4}\b|oggie")
+                    files = [attrs["src"]] + re.findall(r"(\S+)\s+\d+w", attrs.get("srcset", ""))
+                    for ref in files:
+                        path = ROOT / unquote(urlsplit(ref).path).lstrip("/")
+                        seen.add(path.name)
+                        self.assertTrue(path.is_file(), ref)
+                        data = path.read_bytes()
+                        self.assertEqual((data[:4], data[8:12]), (b"RIFF", b"WEBP"))
+                        self.assertLess(len(data), 150 * 1024)
+            if name == "index.html":
+                self.assertEqual(sum(1 for a in images if "hero-workbench" in a["src"]), 1)
+        # No unused or non-WebP files hide in assets/img.
+        self.assertEqual({p.name for p in (ROOT / "assets/img").iterdir()}, seen)
 
     def test_current_role_and_private_job_details(self):
         # Promoted to Project Manager on 2026-11-18. Offer-letter details stay private.

@@ -75,7 +75,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/fonts/jetbrains-mono-latin-400-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="styles.css?v=18">
+    <link rel="stylesheet" href="styles.css?v=19">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -161,6 +161,15 @@
           <div><dt>Lab</dt><dd>Proxmox lab, run through Git <span>written up through November 2026</span></dd></div>
         </dl>
       </section>
+
+      <!-- Illustration: the hero image. Wordless line drawing; the alt text carries it. -->
+      <figure class="art-band">
+        <img src="assets/img/hero-workbench-1200.webp"
+             srcset="assets/img/hero-workbench-600.webp 600w, assets/img/hero-workbench-1200.webp 1200w, assets/img/hero-workbench-1774.webp 1774w"
+             sizes="(min-width: 1232px) 1200px, calc(100vw - 32px)"
+             width="1200" height="413" decoding="async"
+             alt="Line drawing of a workbench with a laptop, a small rack of three network switches with tidy patch cables, and a notebook with a pencil.">
+      </figure>
 
       <!-- Lab -->
       <section class="section" id="lab" aria-labelledby="lab-title">
@@ -255,6 +264,7 @@
             </li>
             <li class="record">
               <h4>One login for people, short-lived certs for scripts.</h4>
+              <figure class="diagram spot"><img src="assets/img/spot-identity-560.webp" srcset="assets/img/spot-identity-560.webp 560w, assets/img/spot-identity-1120.webp 1120w" sizes="(min-width: 520px) 460px, calc(100vw - 32px)" width="560" height="108" loading="lazy" decoding="async" alt=""></figure>
               <dl class="decision">
                 <div><dt>What broke</dt><dd>A password per app for people and long-lived keys for automation both mean one leak goes a long way.</dd></div>
                 <div><dt>What I did</dt><dd>Authelia handles sign-in, with OIDC when the app supports it and Caddy forward-auth when it doesn&rsquo;t. Managed hosts take short-lived OpenBao SSH certificates checked against pinned host keys.</dd></div>
@@ -263,6 +273,7 @@
             </li>
             <li class="record">
               <h4>The lab remembers things so I don&rsquo;t have to.</h4>
+              <figure class="diagram spot"><img src="assets/img/spot-memory-560.webp" srcset="assets/img/spot-memory-560.webp 560w, assets/img/spot-memory-1120.webp 1120w" sizes="(min-width: 520px) 460px, calc(100vw - 32px)" width="560" height="104" loading="lazy" decoding="async" alt=""></figure>
               <dl class="decision">
                 <div><dt>What broke</dt><dd>Context kept getting lost between sessions, between people, and between AI agents.</dd></div>
                 <div><dt>What I did</dt><dd>Homelable keeps the inventory. OpenViking gives the agents memory that carries over between sessions. Ollama runs local models on a GPU passed through to a container. Changes still go through Git.</dd></div>
@@ -323,6 +334,7 @@ if (
         <div class="section-body">
           <p class="lede">Problems I&rsquo;ve made smaller.</p>
           <p class="section-note">Stuff from MSP and onsite jobs, separate from the lab: what was wrong, what I built, and how it went.</p>
+          <figure class="section-art spot-work"><img src="assets/img/spot-work-560.webp" srcset="assets/img/spot-work-560.webp 560w, assets/img/spot-work-1120.webp 1120w" sizes="(min-width: 620px) 560px, calc(100vw - 32px)" width="560" height="135" loading="lazy" decoding="async" alt=""></figure>
 
           <div class="cases">
             <details class="case" id="router-automation" open>
@@ -381,6 +393,7 @@ if (
         <div class="section-body">
           <p class="lede">The escalation path turned into a career.</p>
           <p class="section-note">Five years from Tier 1 tickets to owning escalations, field work and embedded support, and now running the projects.</p>
+          <figure class="section-art spot-history"><img src="assets/img/spot-history-400.webp" srcset="assets/img/spot-history-400.webp 400w, assets/img/spot-history-800.webp 800w" sizes="340px" width="400" height="167" loading="lazy" decoding="async" alt=""></figure>
 
           <ol class="timeline">
             <li class="role is-current">
