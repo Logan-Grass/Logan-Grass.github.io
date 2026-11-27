@@ -80,6 +80,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
+  --header-h: 60px;
   -webkit-text-size-adjust: 100%;
   scrollbar-color: var(--surface-1) var(--mantle);
   accent-color: var(--lavender);
@@ -315,18 +316,33 @@ main,
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(400px, 0.95fr);
-  grid-template-areas: "main bench";
-  grid-template-rows: auto;
+  grid-template-areas: "main bench" "cue cue";
+  grid-template-rows: 1fr auto;
   gap: 0 var(--s8);
-  align-items: start;
-  padding: var(--s8) 0 var(--s8);
+  align-items: center;
+  /* The hero is the first screen: it fills the window below the header and its
+     content is centred in that space. The next section starts below the fold. */
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
+  padding: var(--s7) 0 var(--s5);
 }
-/* The left column is as tall as the terminal and map: the name lines up with the top
-   of the terminal and the facts with the bottom of the map. */
-.hero-main { grid-area: main; display: flex; flex-direction: column; align-items: flex-start; align-self: stretch; min-width: 0; }
-.hero-main > .facts { align-self: stretch; margin-top: auto; }
+.hero-main { grid-area: main; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.hero-main > .facts { align-self: stretch; margin-top: 0; }
 .hero-main > .actions { margin-bottom: var(--s7); }
 .hero > .workbench { grid-area: bench; }
+/* Quiet pointer to what comes next, so the fold is not a dead end. */
+.hero-cue {
+  grid-area: cue;
+  justify-self: start;
+  margin-top: var(--s5);
+  color: var(--subtext-0);
+  font-size: 0.9rem;
+  line-height: 1.75rem;
+}
+.hero-cue:hover { color: var(--lavender); }
+.hero-cue span { color: var(--lavender); }
+/* Short or landscape windows: let the content set the height rather than clip it. */
+@media (max-height: 700px) { .hero { min-height: 0; } }
 /* Wide screens: the two lists read as one summary under the introduction. */
 
 h1 {
@@ -455,7 +471,7 @@ h1 {
 
 /* Map */
 
-.map-frame { position: relative; height: 150px; background: var(--crust); }
+.map-frame { position: relative; height: 230px; background: var(--crust); }
 .map-fallback {
   position: absolute;
   inset: 0;
@@ -970,12 +986,14 @@ h1 {
   .site-header { grid-template-columns: 1fr auto; row-gap: 4px; padding-bottom: 6px; }
   .nav-links { grid-column: 1 / -1; grid-row: 2; flex-wrap: nowrap; justify-content: flex-start; margin-left: -10px; overflow-x: auto; scrollbar-width: none; }
   .nav-links::-webkit-scrollbar { display: none; }
-  html { scroll-padding-top: 108px; }
+  html { scroll-padding-top: 108px; --header-h: 94px; }
+  .hero-cue { display: none; }
   /* Terminal stacks above the map once the hero is a single column. */
   .hero {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "main" "bench" "facts";
+    grid-template-areas: "main" "bench";
     grid-template-rows: auto;
+    align-items: start;
     gap: var(--s7);
     padding-top: var(--s7);
   }
@@ -1053,7 +1071,7 @@ h1 {
 @media print {
   body { background: #fff; color: #111; }
   .site-header, .workbench, .contact-form, .skip-link, .cursor,
-  .scene-art, .diagram.spot, .not-found-art { display: none !important; }
+  .scene-art, .diagram.spot, .not-found-art, .hero-cue { display: none !important; }
   .hero, .section, .records { display: block; padding: 24px 0; }
   h1, h2, h3, h4, .lede, .case-title, .facts dd, .quote blockquote p { color: #111; }
   .evidence pre { color: #111; background: #eee; white-space: pre-wrap; overflow: visible; }

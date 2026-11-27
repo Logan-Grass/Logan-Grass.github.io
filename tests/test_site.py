@@ -276,6 +276,16 @@ class SiteTests(unittest.TestCase):
             self.assertIn("section-body", parent.classes, f"back row sits in <{parent.tag}>")
             self.assertIs(parent.children[-1], row, "back row must be last in its section body")
 
+    def test_hero_fills_the_first_screen(self):
+        css = (ROOT / "styles.css").read_text()
+        hero = re.search(r"\n\.hero \{(.*?)\n\}", css, flags=re.S)
+        self.assertIsNotNone(hero)
+        block = hero.group(1) if hero else ""
+        self.assertIn("100vh - var(--header-h)", block)  # fallback
+        self.assertIn("100svh - var(--header-h)", block)
+        self.assertIn("--header-h", css.split(".hero {")[0])
+        self.assertIn('href="#agents"', self.source)  # the cue below the hero
+
     def test_favicon_is_a_shape_not_text_and_linked_everywhere(self):
         svg = (ROOT / "favicon.svg").read_text()
         # Text would depend on an installed font; a tab icon must not.
