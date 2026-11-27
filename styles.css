@@ -321,8 +321,10 @@ main,
   align-items: start;
   padding: var(--s8) 0 var(--s8);
 }
-.hero-main { grid-area: main; display: flex; flex-direction: column; align-items: flex-start; align-self: center; min-width: 0; }
-.hero-main > .facts { align-self: stretch; margin-top: 0; }
+/* The left column is as tall as the terminal and map: the name lines up with the top
+   of the terminal and the facts with the bottom of the map. */
+.hero-main { grid-area: main; display: flex; flex-direction: column; align-items: flex-start; align-self: stretch; min-width: 0; }
+.hero-main > .facts { align-self: stretch; margin-top: auto; }
 .hero-main > .actions { margin-bottom: var(--s7); }
 .hero > .workbench { grid-area: bench; }
 /* Wide screens: the two lists read as one summary under the introduction. */
