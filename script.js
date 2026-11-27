@@ -116,12 +116,13 @@ const TERMINAL_COMMANDS = Object.freeze({
   resume: () => [{ node: resumeLink() }, { text: "PDF download, current revision.", kind: "dim" }],
   agents: () => [
     "a coordinator hands each task to its own agent; they share memory between sessions",
+    "real work, not demos: alerts come with an answer, and I read every deploy back myself",
     "they open pull requests like anyone else; a change merges only after checks and an independent review",
     "anything that would restart the server waits for me",
     { text: "→ ~/agents", kind: "ok", target: "#agents" }
   ],
   lab: () => [
-    "a small home lab where I practice work habits: changes are written down, new machines enroll themselves in monitoring, access expires on its own",
+    "a 12U rack at home next to my desk; what I build here comes to work with me",
     { text: "what I'd built by November 2026, not a live status page", kind: "dim" },
     { text: "→ ~/lab", kind: "ok", target: "#lab" }
   ],
