@@ -314,10 +314,10 @@ main,
 /* ---------- Hero ---------- */
 
 /* Large screens: everything is sized in rem, so the page grows with the window. The
-   scale follows the width above 1440 px but never exceeds what fits the window height,
+   scale follows the width above 1440 px, gently, and never exceeds what fits the window height,
    so the hero stays exactly one screen tall. Below 1001 px or 701 px it stays at 100%. */
 @media (min-width: 1001px) and (min-height: 701px) {
-  html { font-size: clamp(80%, min(max(100%, 1.1111vw), 1.74vh), 170%); }
+  html { font-size: clamp(80%, min(calc(100% + (100vw - 1440px) * 0.0028), 1.74vh), 125%); }
 }
 
 /* A very faint contour map behind the hero (an echo of the map), fading out at the edges. */
