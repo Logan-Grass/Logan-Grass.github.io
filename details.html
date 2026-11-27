@@ -11,29 +11,31 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/fonts/jetbrains-mono-latin-400-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <link rel="stylesheet" href="styles.css?v=21">
+    <link rel="stylesheet" href="styles.css?v=22">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-name">logan-grass</span><span class="brand-path">:~$</span><span class="cursor" aria-hidden="true"></span><span class="sr-only">, back to the main page</span></a>
+      <a class="brand" href="index.html"><span class="brand-name">logan-grass</span><span class="brand-path">:~/details$</span><span class="cursor" aria-hidden="true"></span><span class="sr-only">, back to the main page</span></a>
       <nav class="nav-links" aria-label="Primary">
+        <a class="nav-back" href="index.html">main page</a>
         <a href="#lab">lab</a>
+        <a href="#field">field</a>
         <a href="#stack">toolkit</a>
         <a href="#feedback">tickets</a>
         <a href="#credentials">certs</a>
-        <a href="index.html">home</a>
       </nav>
       <a class="nav-action" href="assets/logan-grass-resume.pdf?v=71409c6a" download><span class="sr-only">Download </span>resume.pdf</a>
     </header>
 
     <main id="main">
       <section class="details-intro" aria-labelledby="details-title">
+        <p class="crumb"><a href="index.html">logangrass.com</a> <span aria-hidden="true">/</span> technical detail</p>
         <p class="t-line t-cmd"><span class="t-ps1">logan@la:~$</span> cat details.txt</p>
-        <h1 id="details-title">The long version.</h1>
-        <p class="intro">The technical write-up behind the main page: the lab in detail, the field work and tools, and every ticket response. Nothing here is live status; it is what I had built by November 2026.</p>
+        <h1 id="details-title">The technical detail.</h1>
+        <p class="intro">The write-up behind the main page: the lab in detail, the field work and tools, and every ticket response. Nothing here is live status; it is what I had built by November 2026.</p>
         <div class="actions">
-          <a class="button primary" href="index.html">Back to the short version</a>
+          <a class="button primary" href="index.html">Back to the main page</a>
           <a class="text-link" href="index.html#contact">or send me a message</a>
         </div>
       </section>
@@ -180,7 +182,8 @@ if (
                 <p class="evidence-source">scripts/onboard_lxcs.py · source 6df1c56 · exact excerpt inside the managed-target loop.</p>
                 <a href="assets/evidence/target-selection.md" download>Download excerpt and verification notes</a>
               </article>
-            </div>
+              <p class="back-row"><a class="text-link" href="index.html#lab">&larr; Back to the main page</a></p>
+        </div>
           </section>
 
           <section class="policy" aria-labelledby="policy-title">
@@ -206,6 +209,7 @@ if (
             <div><dt>Secure remote access</dt><dd>RDS, load balancing, MFA, session monitoring, browser-based RDP</dd></div>
             <div><dt>Workflow cleanup</dt><dd>SOPs and Power Automate replacing repeat form handling</dd></div>
           </dl>
+          <p class="back-row"><a class="text-link" href="index.html#work">&larr; Back to the main page</a></p>
         </div>
       </section>
 
@@ -224,6 +228,7 @@ if (
             <div><dt>Network and field</dt><dd>MikroTik RouterOS, UniFi, FortiGate, WatchGuard, VLANs, firewall policy, fiber termination, structured cabling</dd></div>
             <div><dt>Recovery and endpoints</dt><dd>Veeam, Axcient, backup validation, DR testing, ManageEngine, SOTI MobiControl, macOS, iOS, printers, MFPs</dd></div>
           </dl>
+          <p class="back-row"><a class="text-link" href="index.html#work">&larr; Back to the main page</a></p>
         </div>
       </section>
 
@@ -251,6 +256,7 @@ if (
             <li><q>10/10, would recommend!</q> <span>Amy, retail</span></li>
             <li><q>Logan is awesome!</q> <span>Mason, business services</span></li>
           </ul>
+          <p class="back-row"><a class="text-link" href="index.html#feedback">&larr; Back to the main page</a></p>
         </div>
       </section>
 
@@ -265,6 +271,7 @@ if (
               <li><span>Eagle Scout</span><em>BSA</em></li>
               <li class="cert-progress"><span>CompTIA Security+</span><em>in progress</em></li>
             </ul>
+          <p class="back-row"><a class="text-link" href="index.html#contact">&larr; Back to the main page</a></p>
         </div>
       </section>
     </main>

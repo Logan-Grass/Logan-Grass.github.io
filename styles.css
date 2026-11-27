@@ -315,15 +315,16 @@ main,
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(400px, 0.95fr);
-  grid-template-areas: "main bench" "facts bench";
-  grid-template-rows: auto 1fr;
+  grid-template-areas: "main bench";
+  grid-template-rows: auto;
   gap: 0 var(--s8);
   align-items: start;
-  padding: var(--s8) 0 var(--s9);
+  padding: var(--s8) 0 var(--s8);
 }
-.hero-main { grid-area: main; }
+.hero-main { grid-area: main; display: flex; flex-direction: column; align-items: flex-start; align-self: center; min-width: 0; }
+.hero-main > .facts { align-self: stretch; margin-top: 0; }
+.hero-main > .actions { margin-bottom: var(--s7); }
 .hero > .workbench { grid-area: bench; }
-.hero > .facts { grid-area: facts; }
 /* Wide screens: the two lists read as one summary under the introduction. */
 
 h1 {
@@ -976,7 +977,8 @@ h1 {
     gap: var(--s7);
     padding-top: var(--s7);
   }
-  .facts-primary { margin-top: var(--s6); }
+  .hero-main > .facts-primary { margin-top: 0; }
+  .hero-main > .actions { margin-bottom: var(--s6); }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s6); }
   .section { padding: var(--s6) 0 var(--s7); }
   .lab-intro { grid-template-columns: minmax(0, 1fr); }
@@ -989,7 +991,7 @@ h1 {
   .hero { gap: var(--s6); padding: var(--s6) 0 var(--s7); }
   .intro { margin: var(--s4) 0 var(--s5); }
   .facts { grid-template-columns: minmax(0, 1fr); }
-  .facts-primary { margin-top: var(--s5); }
+  .hero-main > .actions { margin-bottom: var(--s5); }
   .actions { margin-bottom: 0; }
   .terminal-history { min-height: 160px; max-height: 330px; }
   .topology-grid { grid-template-columns: minmax(0, 1fr); }
@@ -1055,3 +1057,17 @@ h1 {
   .evidence pre { color: #111; background: #eee; white-space: pre-wrap; overflow: visible; }
   .case:not([open]) > :not(summary) { display: block; }
 }
+
+/* ---------- Moving between the main page and the technical detail ---------- */
+
+/* Cross-document fade where the browser supports it; plain navigation elsewhere. */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 160ms; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+.nav-links a.nav-back::before { content: "\2190\00a0"; content: "\2190\00a0" / ""; color: var(--lavender); }
+.crumb { margin: 0 0 var(--s5); color: var(--subtext-0); font-size: 0.94rem; }
+.crumb a { color: var(--lavender); text-decoration: underline; text-underline-offset: 3px; }
+.back-row { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px dashed var(--line); }
+.back-row .text-link { display: inline-flex; align-items: center; min-height: 44px; }
+@media print { .crumb, .back-row { display: none; } }
