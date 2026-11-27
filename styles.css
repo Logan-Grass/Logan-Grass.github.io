@@ -455,7 +455,7 @@ h1 {
 
 /* Map */
 
-.map-frame { position: relative; height: 230px; background: var(--crust); }
+.map-frame { position: relative; height: 150px; background: var(--crust); }
 .map-fallback {
   position: absolute;
   inset: 0;
